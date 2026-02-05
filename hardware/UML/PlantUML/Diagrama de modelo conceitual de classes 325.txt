@@ -1,0 +1,311 @@
+@startuml
+' ----------------- Declaração de classes -----------------
+class Projeto_TCC_may26a {
+  - unsigned long ultimoTempoIndicador
+  - const unsigned long intervaloIndicador 
+  - int contadorPontos
+  - unsigned long tempoAtualMillis
+  
+  +void setup()
+    Serial.begin()
+    SerialBT.begin()
+    lcd.init()
+    aguardar()
+    lcd.backlight()
+    lcd.clear()
+    lcd.setCursor()
+    lcd.print()
+    pinMode()
+    dht.setup()
+    digitalWrite()
+    initProperties()
+    ArduinoCloud.begin()
+    WiFi.begin()
+    setDebugMessageLevel()
+    ArduinoCloud.printDebugInfo()
+
+  +void loop()
+    ArduinoCloud.update()
+    verificarConexaoWiFi()
+    lerSensorDHT()
+    enviarMediaDHT()
+    lerSensorLDR()
+    enviarMediaLDR()
+    analisarLuminosidade()
+    coletarLeituras()
+    calcularMedia60s()
+    percentualLeituras()
+    imprimirMediaPinoEspecifico()
+    lerComandosDaPlanilha()
+    atualizarValoresPlanilhaNuvem()
+    registrarDadosPlanilha()
+    zerarTudoFree()
+}
+
+class SensorDHT {
+  - dht: DHTesp
+  - ultimoTempoDHT: unsigned long
+  - intervaloLeituraDHT: const unsigned long <<constant>>
+  - intervaloMediaDHT: const unsigned long <<constant>>
+  - ultimoTempoMediaDHT: unsigned long
+  - somaTemp: float
+  - somaUmid: float
+  - mediaTemp: float
+  - mediaUmid: float
+  - contAmostrasValidasDHT: int
+
+  + lerSensorDHT(): void
+  + enviarMediaDHT(): void
+}
+
+class DHTesp {
+  + getTempAndHumidity(): TempAndHumidity
+}
+
+
+
+class SensorLDR {
+  - ultimoTempoLDR: unsigned long
+  - intervaloLDR: const unsigned long <<constant>>
+  - ultimoTempoMediaLDR: unsigned long
+  - intervaloMediaLDR: const unsigned long <<constant>>
+  - LIMIAR_SECO: int <<constant>>
+  - mediaLuz: float
+  - tempoInicioBaixaLuz: unsigned long
+  - inicioLuzAmanhecendo: unsigned long
+  - acaoExecutadaAoAnoitecer: bool
+  - acaoExecutadaAoAmanhecer: bool
+  - estaDeNoite: bool
+  - somaLuz: long
+  - contAmostrasValidasLDR: int
+
+  + lerSensorLDR(): void
+  + enviarMediaLDR(): void
+  + analisarLuminosidade(luz: int): void
+}
+
+class ExecutarAcaoSol {
+  - aguardandoProximo: bool
+  - esvaziamentoFeito: bool
+  - esvaziandoCano: bool
+  - acaoSolApareceIniciada: bool <<static>>
+  - acaoSolDesapareceIniciada: bool <<static>>
+  - irrigando: bool
+  - indiceReleAtual: int
+  - tentativasAtual: int
+
+  + executarAcao_solAparece(): void
+  + executarAcao_solDesaparece(): void
+  
+}
+
+class processarIrrigacao {
+  - LIMIAR_SECO: int <<constant>>
+  - tempoIrrigando: const unsigned long
+  - tempoEntreRele: const unsigned long
+  - tempoMaximoIrrigacao: const unsigned long
+  - umidadeDesejada: const int
+  - maxTentativas: const int
+  - irrigando: bool
+  - aguardandoProximo: bool
+  - ultrapassouLimiteSeguranca: bool
+  - tempoInicioIrrigacao: unsigned long
+  - tempoInicioEspera: unsigned long
+  - indiceReleAtual: int
+  - reles[16]: const int
+  - nomesReles[16]: const char*
+
+  + processarIrrigacao(entraEmSono: bool, agora: unsigned long): void
+  
+}
+
+class EsvaziandoSistema {
+  - esvaziamentoFeito: bool
+  - esvaziandoCano: bool
+  - tempoRemoverAgua: unsigned long
+  - tempoEsvaziamento: const unsigned long
+
+  + removerAguaQuente(): void
+}
+
+class DeepSleep {
+  - preparandoSono: bool
+  - tempoInicioPreSono: unsigned long
+
+  + modoSonoEsp32(): void
+}
+
+class SensorSoloMultiplexado {
+  - tempoUltimaLeituraCanal: unsigned long
+  - intervaloLeituraPorCanal: const unsigned long <<constant>>
+  - tempoUltimaExibicao: unsigned long
+  - intervaloExibicao: const unsigned long <<constant>>
+  - ultimaTrocaLCD: unsigned long
+  - intervaloLCD: const unsigned long <<constant>>
+  - indiceLCD: int
+  - sensoresMinimos[16]: int
+  - sensoresMaximos[16]: int
+  - canalAtual: int
+  - valores_analogicos[16]: int
+  - somaLeituras[16]: long
+  - medias[16]: int
+  - mediasPercentual[16]: int
+  - totalAmostrasJanela: int
+
+  + lerMultiplexador(): int
+  + coletarLeituras(): void
+  + calcularMedia60s(): void
+  + percentualLeituras(): void
+  + exibirLeituras(): void
+  + imprimirMediaPinoEspecifico(pino: byte): void
+}
+
+class Reiniciar {
+  - valores_analogicos[16]: int
+  - somaLeituras[16]: long
+  - medias[16]: int
+  - mediasPercentual[16]: int
+  - totalAmostrasJanela: int
+
+  + zerarTudoFree(): void
+}
+
+class WiFiManager {
+  - ssid : const char*
+  - password : const char*
+  - wifiConectado : bool
+  - tentandoConectar : bool
+  - tempoUltimaVerificacaoWiFi : unsigned long
+  - intervaloVerificacaoWiFi : const unsigned long = 5000
+
+  + verificarConexaoWiFi() : void
+}
+
+class PlanilhaManager {
+  - googleScriptURL : String
+
+  +String seguirRedirecionamento(String url)
+  +bool escreverEmLista(String identificacao, int numDados, float dados[])
+  +bool escreverEmCelula(String identificacao, String celula, String dado)
+  +String lerCelula(String identificacao, String celula)
+  +String lerLinha(String identificacao, int linha)
+  +void montarCabecalho(String _boardID, const String& colunaInicial, const std::vector<String>& cabecalhos)
+}
+
+class HTTPClient {
+  +begin(url: String): void
+  +GET(): int
+  +getLocation(): String
+  +getString(): String
+  +addHeader(name: String, value: String): void
+  +POST(body: String): int
+  +end(): void
+}
+
+class ArduinoJson {
+  +StaticJsonDocument<200>
+  +createNestedArray(name: String): JsonArray
+  +serializeJson(doc: JsonDocument, output: Stream): void
+}
+
+class Controlador {
+  - ledpin: int
+  - comandoLed: String
+  - comandoReleA: String
+  - comandoReleB: String
+  - estadoLedAtual: float
+  - estadoReleA: float
+  - estadoReleB: float
+  - estadoDesejadoLed: bool
+  - estadoDesejadoReleA: bool
+  - estadoDesejadoReleB: bool
+  - estadoLed: float
+  - temperatura: float
+  - umidadeAr: float
+  - luminosidade: float
+  - umidadeSolo3: float
+  - umidadeSolo10: float
+  - umidadeSolo14: float
+  - tempoUltimaLeitura: unsigned long
+  - intervaloLeitura: const unsigned long
+
+  + lerComandosDaPlanilha(): void
+  + atualizarValoresPlanilhaNuvem(): void
+  + atualizarEstado(pino: int, nome: String, estadoDesejado: bool, estadoAtual: float&): void
+  + registrarDadosPlanilha(): void
+}
+
+class ArduinoCloudManager {
+  - temperaturaNuvem: float
+  - umidadeNuvem: float
+  - luminosidadeNuvem: float
+  - umidadeSoloNuvem_3: float
+  - umidadeSoloNuvem_10: float
+  - umidadeSoloNuvem_14: float
+  
+  + initProperties(): void
+  + begin(): void
+  + setDebugMessageLevel(level: int): void
+  + printDebugInfo(): void
+  + onLedTesteChange(): void
+  + onReleAChange(): void
+  + onReleBChange(): void
+  + onTemperaturaNuvemChange(): void
+  + onUmidadeNuvemChange(): void
+  + onLuminosidadeNuvemChange(): void
+  + onUmidadeSoloNuvem3Change(): void
+  + onUmidadeSoloNuvem10Change(): void
+  + onUmidadeSoloNuvem14Change(): void
+}
+
+class DisplayLCD {
+  - ENDERECO_LCD: const int = 0x27
+  - COLUNAS_LCD: const int = 16
+  - LINHAS_LCD: const int = 2
+  - lcd: LiquidCrystal_I2C
+
+  + init(): void
+  + backlight(): void
+  + clear(): void
+  + setCursor(coluna: int, linha: int): void
+  + print(mensagem: String): void
+}
+
+class BluetoothManager {
+  - SerialBT: BluetoothSerial
+
+  + begin(nomeDispositivo: String): void
+}
+
+class Aguarda { 
+  - unsigned long ultimoTempoIndicador
+  - const unsigned long intervaloIndicador
+  - int contadorPontos
+
+  + void aguardar(unsigned long tempo_ms)
+  + void atualizarIndicador(unsigned long tempoAtualMillis)
+}
+
+' ---------------- Ligações agrupadas ----------------
+Projeto_TCC_may26a --> BluetoothManager : inicializa comunicação
+Projeto_TCC_may26a --> DisplayLCD : inicializa Apresentação
+Projeto_TCC_may26a --> Aguarda : espera comando
+Projeto_TCC_may26a --> ArduinoCloudManager : Chama funções
+ArduinoCloudManager --> Controlador : invoca atualizarEstado()
+Projeto_TCC_may26a --> WiFiManager : Faz conexão
+WiFiManager --> PlanilhaManager : usa montarCabecalho()
+Projeto_TCC_may26a --> SensorDHT : Faz leitura e tratamento
+SensorDHT --> DHTesp : usa
+Projeto_TCC_may26a --> SensorLDR : Faz leitura e tratamento
+SensorLDR --> ExecutarAcaoSol : chama
+ExecutarAcaoSol --> processarIrrigacao : chama
+ExecutarAcaoSol --> EsvaziandoSistema : chama
+processarIrrigacao --> DeepSleep : chama
+Projeto_TCC_may26a --> SensorSoloMultiplexado : inicializa Leitura
+Projeto_TCC_may26a --> PlanilhaManager : check de comando
+PlanilhaManager ..> HTTPClient : usa
+PlanilhaManager ..> ArduinoJson : usa
+Projeto_TCC_may26a --> Controlador : Envia os dados pra a nuvem e Planilha
+Controlador --> PlanilhaManager : usa
+Projeto_TCC_may26a --> Reiniciar : Loop: zera valores Umidade Solo
+@enduml

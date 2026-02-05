@@ -1,0 +1,62 @@
+@startuml
+'left to right direction
+top to bottom direction
+
+skinparam defaultTextAlignment center
+skinparam linetype ortho
+
+package "Fontes de Energia" {
+  node "Painel Solar" as SolarPanel
+  node "Controlador de Carga" as ChargeController
+  node "Bateria 12V" as Battery
+}
+
+package "Unidade de Controle" {
+  node "ESP32 DevKit V1" as ESP32
+}
+
+package "Periféricos Locais" {
+  node "Sensores Ambiente (DHT11, LDR)" as Sensores
+  node "Display LCD (I2C)" as LCD
+  node "Relé 5V" as Rele
+  node "MUX CD74HC4067" as MUX
+}
+
+package "Sensores de Solo" {
+  node "Umidade Solo 3" as SoilSensor3
+  node "Umidade Solo 10" as SoilSensor10
+  node "Umidade Solo 14" as SoilSensor14
+}
+
+package "Atuador" {
+  node "Válvula Solenoide" as Valvula
+}
+
+package "Comunicação Externa" {
+  cloud "Internet" {
+    node "Google Sheets"
+    node "Arduino IoT Cloud"
+  }
+  node "Smartphone (App)" as Smartphone
+}
+
+' --- Conexões Individuais ---
+SolarPanel --> ChargeController
+ChargeController --> Battery
+Battery --> ESP32
+
+ESP32 --> Sensores
+ESP32 --> LCD
+ESP32 --> Rele
+Rele --> Valvula
+
+ESP32 --> MUX
+MUX --> SoilSensor3
+MUX --> SoilSensor10
+MUX --> SoilSensor14
+
+ESP32 --> "Google Sheets"
+ESP32 --> "Arduino IoT Cloud"
+ESP32 --> Smartphone
+
+@enduml

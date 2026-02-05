@@ -1,0 +1,94 @@
+:Autor: andre_lopes
+:E-mail: andreoliveiralopes123@gmail.com
+:Data: 08/06/2025
+:Revisão: versão# 1.0
+:Licença: Domínio Público
+
+= Especificações utilizadas no: {Projeto}
+
+Gerenciador de Placas: esp32 v3.2.0 ---> https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+Ferramenta de Navegação Web: Brave v1.79.118 (May 29, 2025)
+Ferramenta de desenvolvimento: IDE Arduino v2.3.4
+Ferramenta de Comunicação intermediaria (Arduino Cloud): Arduino Cloud Agent v1.7.0-87f097b
+Ferramenta de Análise de Dados: Power BI v2.137.1102.0 64-bit (outubro de 2024)
+Ferramenta de Prototipagem: Fritzing v0.9.3b (Beta)
+Ferramente Web de Simulação: Tinkercad ou WOKWI
+Ferramente Web de Nuvem e Dashboard :Arduino Cloud
+Ferramenda Web de Bando de dados Utilizada: Google Planilhas
+Ferramenta web de Diagrama UML: PlantUML
+Ferramente Mobile de Assistente virtual: Alexa v2.2.626008.0 - Skill Arduino 
+
+
+
+= Projeto: {Projeto}  
+
+Este trabalho propõe um sistema automatizado de irrigação para pomares e pequenas plantações, visando reduzir deslocamentos, otimizar o tempo, minimizar riscos e custos operacionais. A solução utiliza a plataforma Arduino Cloud, sensores alimentados por energia solar e comunicação via protocolo MQTT, com o microcontrolador ESP32 DevKit v1 acoplado a uma placa expansora. Sensores de umidade do solo, temperatura e umidade do ar, luminosidade e outros fornecem dados processados por comandos em C++, que acionam relés e válvulas conforme a necessidade das plantas. As informações são exibidas em tempo real na nuvem do Arduino e armazenadas no Google Sheets, permitindo análise no Power BI. A proposta destaca-se pela acessibilidade e flexibilidade, podendo ser integrada a assistentes virtuais como a Alexa e adaptada a diferentes perfis de produtores. Conclui-se que o uso da IoT na irrigação oferece mais eficiência, economia, sustentabilidade e segurança ao campo. 
+
+== Passo 1: Instalação
+
+1. Abra este arquivo
+2. Escolha nas configurações a placa: ESP32 DEV MODULE
+3. Edite como desejar
+4. Liberte para o Mundo!
+
+== Passo 2: Monte o circuito
+
+Monte o circuito seguindo o diagrama layout.png anexado ao sketch
+
+== Passo 3: Carregue o código
+
+Envie o código contido neste sketch para sua placa no tipo de
+partição de memoria: Minimal SPIFFS (1.9MB APP with OTA/190KB SPIFFS). 
+
+=== Estrutura de pastas
+
+....
+ Projeto_TCC_may26a       	=> Pasta do sketch Arduino
+  ├── Projeto_TCC_may26a.ino       => Arquivo principal do Arduino
+  ├── thingProperties.h      		=> Biblioteca necessaria. (Tem outras que podem ser vista no TCC)
+  ├── layout.png          			=> Uma imagem do layout de montagem do projeto
+  ├── arduino_secrets.h          	=> Arquivos de credenciais. 
+  ├── sketch.json          			=> Acesso
+  ├── libraries          			=> Bibliotecas usadas
+  └── ReadMe.adoc         			=> este arquivo
+....
+
+=== Licença
+Este projeto é disponibilizado sob a Licença {Open Source}.
+
+=== Contribuindo
+Para contribuir com este projeto, entre em contato: 
+E-mail:
+andreoliveiralopes123@gmail.com
+Rede:
+https://github.com/andre-oliveira-lopes
+
+=== Lista de Materiais (BOM)
+Adicione a lista de materiais necessários para este projeto.
+
+|================================================================================================================================================
+| ID | Nome da peça                                           				   | Número da peça             | Quantidade
+| P1 | Placa ESP32 com WI-FI, Bluetooth ESP32S IDE Dual Core - Dev Kit V1 + Cabo Micro USB | -                  	| 1
+| P2 | Placa de Expansão para ESP32-DevKit V1 30 Pinos (ESP32 Base Board) 		   | -                  	| 1
+| S1 | Sensores de umidade do solo                            				   | -                          | conforme necessidade
+| S2 | Sensor de Temperatura e Umidade do ar (DHT11)          				   | -                          | conforme necessidade
+| S3 | Módulo Sensor de Luminosidade Fotoresistor (LDR)       				   | -                          | conforme necessidade
+| R1 | Módulo relé 1 canal de 5V                              				   | -                          | conforme necessidade
+| V1 | Válvula solenóide 12V                                  				   | -                          | conforme necessidade
+| M1 | Multiplexador CD74HC4067                               				   | -                          | 1
+| PS1| Painel solar 50W / 12V + Regulador de carga de 20A     				   | -                          | conforme necessidade
+| PS2| Painel solar 50W / 12V (adicional)                     				   | -                          | conforme necessidade
+| B1 | Bateria selada 12V / 20Ah                              				   | -                          | 1
+| F1 | Fonte de alimentação 12V 2A para sensores              				   | -                          | conforme necessidade
+| F2 | Fonte de alimentação 5V 2A para sensores               				   | -                          | conforme necessidade
+| D1 | Display LCD I2C 16x2                                   				   | -                          | 1
+| C1 | Caixa de proteção IP65 para uso externo                				   | -                          | conforme necessidade
+| A1 | Conta ativa na plataforma Arduino Cloud                				   | -                          | 1
+| T1 | Ferramentas de desenvolvimento (open-source)           				   | -                          | 1
+|===
+
+
+=== Ajuda
+Este documento está escrito no formato _AsciiDoc_, uma linguagem de marcação para descrever documentos.
+Se precisar de ajuda, você pode procurar na http://www.methods.co.nz/asciidoc[página inicial do AsciiDoc]
+ou consultar a http://powerman.name/doc/asciidoc[tabela de referência do AsciiDoc].

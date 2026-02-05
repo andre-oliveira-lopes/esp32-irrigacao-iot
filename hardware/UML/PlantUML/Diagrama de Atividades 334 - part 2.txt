@@ -1,0 +1,160 @@
+@startuml
+
+'--- Função executarAcao_solAparece ---
+partition executarAcao_solAparece {
+  :Declarar variável estática acaoSolAapareceIniciada = falso;
+  :agora ← millis();
+  if (acaoSolAapareceIniciada == falso) then (sim)
+    :Exibir "Executando ação: Amanheceu" no Serial e Bluetooth;
+    :Limpar LCD;
+    :Exibir "Executando..." na 1ª linha do LCD;
+    :Exibir "Amanheceu..." na 2ª linha do LCD;
+    :acaoSolAapareceIniciada ← verdadeiro;
+
+    :Resetar irrigando, aguardandoProximo, indiceReleAtual, tentativasAtual;
+  endif
+  :Chamar processarIrrigacao(false, agora);
+}
+
+'--- Função executarAcao_solDesaparece ---
+partition executarAcao_solDesaparece {
+  :Declarar variável estática acaoSolDesapareceIniciada = falso;
+  :agora ← millis();
+  :Chamar removerAguaQuente();
+  if (esvaziamentoFeito == falso) then (sim)
+    :Retornar (aguardando esvaziamento);
+  endif
+  if (acaoSolDesapareceIniciada == falso) then (sim)
+    :Exibir "Executando ação: Anoiteceu" no Serial e Bluetooth;
+    :Limpar LCD;
+    :Exibir "Executando..." na 1ª linha do LCD;
+    :Exibir "Anoiteceu..." na 2ª linha do LCD;
+    :acaoSolDesapareceIniciada ← verdadeiro;
+
+    :Resetar irrigando, aguardandoProximo, indiceReleAtual, tentativasAtual;
+    :Resetar esvaziamentoFeito, esvaziandoCano;
+  endif
+  :Chamar processarIrrigacao(true, agora);
+}
+
+partition processarIrrigacao {
+
+  if (indiceReleAtual >= numeroPino?) then
+    if (entraEmSono?) then
+      '--- Início do modoSonoEsp32 expandido aqui ---
+      :Verifica se preparandoSono é falso;
+      if (preparandoSono?) then (Não)
+        :Exibir "Entrando em modo sono profundo por 10 horas...";
+        :LCD - "Sono Profundo";
+        :LCD - "Por 10 horas";
+        :tempoInicioPreSono ← millis;
+        :preparandoSono ← true;
+      endif
+
+      if (preparandoSono) and (millis - tempoInicioPreSono >= 2000) then (Sim)
+        :TEMPO_SONO_MICROS ← 36000000000;
+        :Desligar todos os relés;
+        :Configurar temporizador de sono profundo;
+        :Entrar em deep sleep;
+      endif
+      '--- Fim do modoSonoEsp32 integrado ---
+    else
+      :Exibir "Irrigação finalizada (dia)..." no Serial e Bluetooth;
+      :Limpar LCD;
+      :Exibir "FIM IRRIGACAO" na linha 0;
+      :Exibir "DIA" na linha 1;
+    endif
+    stop
+  endif
+
+  :pinoRele ← reles[indiceReleAtual];
+  :umidade ← mediasPercentual[indiceReleAtual];
+
+  if (pinoRele == -1?) then
+    :indiceReleAtual ← indiceReleAtual + 1;
+    :tentativasAtual ← 0;
+    stop
+  endif
+
+  if (not irrigando and not aguardandoProximo and umidade <= LIMIAR_SECO?) then
+    :Ligar relé no pinoRele;
+    :irrigando ← true;
+    :tempoInicioIrrigacao ← agora;
+    :ultrapassouLimiteSeguranca ← false;
+    :Exibir ativação do relé no Serial, Bluetooth e LCD;
+  endif
+
+  if (irrigando?) then
+    if ((agora - tempoInicioIrrigacao >= tempoIrrigando) or 
+        (agora - tempoInicioIrrigacao >= tempoMaximoIrrigacao)?) then
+
+      if (agora - tempoInicioIrrigacao >= tempoMaximoIrrigacao?) then
+        :ultrapassouLimiteSeguranca ← true;
+        :Exibir aviso de tempo máximo no Serial, Bluetooth e LCD;
+      endif
+
+      :Desligar relé no pinoRele;
+      :irrigando ← false;
+      :aguardandoProximo ← true;
+      :tempoInicioEspera ← agora;
+      :Exibir desativação do relé no Serial, Bluetooth e LCD;
+    endif
+  endif
+
+  if (not irrigando and not aguardandoProximo?) then
+    if (umidade < umidadeDesejada and not ultrapassouLimiteSeguranca?) then
+      :tentativasAtual ← tentativasAtual + 1;
+      if (tentativasAtual < maxTentativas?) then
+        :Exibir "tentativa falhou, reirrigando" no Serial e LCD;
+        :aguardandoProximo ← false;
+      else
+        :Exibir "limite de tentativas atingido" no Serial e LCD;
+        :indiceReleAtual ← indiceReleAtual + 1;
+        :tentativasAtual ← 0;
+        :ultrapassouLimiteSeguranca ← false;
+      endif
+    else
+      :Exibir "umidade desejada atingida" no Serial e LCD;
+      :indiceReleAtual ← indiceReleAtual + 1;
+      :tentativasAtual ← 0;
+      :ultrapassouLimiteSeguranca ← false;
+    endif
+  endif
+
+  if (aguardandoProximo and agora - tempoInicioEspera >= tempoEntreRele?) then
+    :aguardandoProximo ← false;
+  endif
+
+  if (not irrigando and not aguardandoProximo and umidade > LIMIAR_SECO?) then
+    :Exibir "irrigação não necessária" no Serial e LCD;
+    :indiceReleAtual ← indiceReleAtual + 1;
+    :tentativasAtual ← 0;
+  endif
+}
+
+partition removerAguaQuente {
+  :Verifica se esvaziamentoFeito é verdadeiro;
+  if (esvaziamentoFeito?) then (Sim)
+    :RETORNAR;
+  else (Não)
+    if (esvaziandoCano?) then (Não)
+      :Ativar relé esvaziamento do cano;
+      :Exibir "Esvaziando cano: Guardando a água quente!";
+      :LCD - "Esvaziando cano";
+      :LCD - "Guardando a agua";
+      :tempoRemoverAgua ← millis;
+      :esvaziandoCano ← true;
+    else (Sim)
+      if (millis - tempoRemoverAgua >= tempoEsvaziamento) then (Sim)
+        :Desligar relé de esvaziamento do cano;
+        :Exibir "Sistema vazio. Agora pode começar a irrigar.";
+        :LCD - "Sistema vazio";
+        :LCD - "comecar irrigar";
+        :esvaziandoCano ← false;
+        :esvaziamentoFeito ← true;
+      endif
+    endif
+  endif
+}
+
+@enduml

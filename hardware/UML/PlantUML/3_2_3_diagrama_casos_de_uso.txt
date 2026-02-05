@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+actor "Arduino IoT Cloud" as Cloud
+actor "Produtor Agrícola" as Agricultor
+
+rectangle "⚙ Sistema de Irrigação (ESP32)" as ESP32 {
+  usecase "Monitorar Sensores" as UC1
+  usecase "Acionar Relés de Irrigação" as UC2
+  usecase "Enviar Dados para a Nuvem" as UC3
+  usecase "Gerenciar Conexão Wi-Fi" as UC4
+  usecase "Entrar em Modo de Economia de Energia" as UC5
+}
+
+usecase "Receber Dados de Sensores" as UC6
+usecase "Enviar Comandos ao Sistema de Irrigação" as UC7
+usecase "Visualizar Dados de Sensores" as UC8
+usecase "Configurar Parâmetros do Sistema" as UC9
+usecase "Ativar/Desativar Irrigação Manualmente" as UC10
+
+' Casos internos do ESP32
+ESP32 --> UC1
+ESP32 --> UC2
+ESP32 --> UC3
+ESP32 --> UC4
+ESP32 --> UC5
+
+' Arduino IoT Cloud
+Cloud --> UC6
+Cloud --> UC7
+Cloud <--> ESP32 : Comunicação de Dados
+
+' Produtor Agrícola
+Agricultor --> UC8
+Agricultor --> UC9
+Agricultor --> UC10
+
+@enduml

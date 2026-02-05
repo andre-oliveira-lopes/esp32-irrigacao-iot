@@ -1,0 +1,55 @@
+@startuml
+' Título do Diagrama
+title Diagrama de Componentes - Irrigação Automatizada (ESP32)
+
+' Definições de estilo
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+package "Sistema de Irrigação Automatizada" {
+    
+    [ESP32 DevKit V1] as esp32
+
+    component "Firmware ESP32\n(Lógica de Controle)" as firmware
+    component "Sensor DHT11\n(Temp. e Umidade do Ar)" as dht11
+    component "Sensor LDR\n(Luminosidade)" as ldr
+    component "Multiplexador\nCD74HC4067" as mux
+    component "Sensor de Umidade do Solo\n(Canais 3, 10, 14)" as soloSensors
+    component "Relé + Válvula Solenoide\n(Controle da Irrigação)" as rele
+    component "Display LCD\n(Visualização Local)" as lcd
+    component "Arduino IoT Cloud\n(Monitoramento/Controle)" as iotcloud
+    component "Planilha Online\n(Google Sheets)" as sheet
+    component "Módulo Wi-Fi\n(Interno no ESP32)" as wifi
+    component "Bateria\n(Alimentação)" as bateria
+    component "Placa Solar\n(Geração de Energia)" as solar
+    component "Controlador de Carga\n(Gerenciamento de Energia)" as controlador
+    actor "Usuário" as usuario
+
+    ' Ligações entre os componentes
+    usuario --> iotcloud : Consulta e envia comandos
+    iotcloud --> esp32 : Comandos via rede
+    esp32 --> firmware
+
+    firmware --> dht11
+    firmware --> ldr
+    firmware --> mux
+    mux --> soloSensors
+
+    firmware --> rele : Liga/desliga irrigação
+    firmware --> lcd : Mostra status
+    firmware --> wifi
+    wifi --> iotcloud
+    firmware --> sheet : Atualiza dados
+
+    bateria --> esp32
+    solar --> controlador
+    controlador --> bateria
+
+}
+
+@enduml
+
+
+
+

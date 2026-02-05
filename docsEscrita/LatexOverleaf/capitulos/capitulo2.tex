@@ -1,0 +1,509 @@
+% CAPÍTULO 2 – DESENVOLVIMENTO
+
+\vspace*{-1.0em}  % Ajuste 
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2. CONTEXTUALIZAÇÃO DO PROBLEMA}}
+\addcontentsline{toc}{section}{2 CONTEXTUALIZAÇÃO DO PROBLEMA}
+\vspace{-0.7\baselineskip}
+
+A irrigação é uma técnica essencial para o cultivo de diversas culturas, especialmente em regiões sujeitas a estiagens prolongadas. Entretanto, métodos tradicionais de irrigação, como o uso manual de mangueiras ou baldes, ainda são amplamente utilizados por agricultores familiares, o que resulta em desperdício de água, baixa eficiência e alta dependência de mão de obra. Tais práticas comprometem a produtividade e a sustentabilidade das lavouras.
+
+Com a crescente escassez de recursos hídricos e os desafios enfrentados no campo, a automação do processo de irrigação, por meio da integração com tecnologias de Internet das Coisas (IoT), surge como uma solução promissora. Essa abordagem permite não apenas a economia de água, mas também a otimização do tempo de trabalho e a redução do esforço físico exigido dos agricultores.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.1. Premissas e Restrições do Projeto}}
+\addcontentsline{toc}{section}{2.1 Premissas e Restrições do Projeto}
+\vspace{-0.7\baselineskip}
+
+Para a viabilização do sistema proposto, algumas premissas foram estabelecidas:
+
+\listarecuada{
+    \item Acesso estável à internet na área de operação.
+    \item Disponibilidade de energia elétrica, ou fontes alternativas como placas solares.
+    \item Espaço físico adequado para testes e instalação de sensores ambientais.
+    \item Precisão satisfatória de sensores de baixo custo.
+}
+
+Contudo, o projeto também enfrenta algumas restrições importantes:
+
+\listarecuada{
+  \setcounter{enumi}{4}  % Começa do item 5
+  \item Orçamento limitado, o que restringe o uso de equipamentos sofisticados.
+  \item Manutenção frequente dos sensores, exigindo suporte contínuo.
+  \item Calibração dos sensores que pode ser complexa e dependente de ajustes manuais no código.
+  \item Instabilidades de conectividade em áreas rurais com sinal fraco.
+  \item Integração dos módulos IoT, que demandou diversas adaptações técnicas.
+  \item Gestão do consumo energético, especialmente em cenários com adoção de fontes renováveis.
+}
+
+Portanto, esses são as premissas e algumas restrições do projeto.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2. Caracterização da Empresa}}
+\addcontentsline{toc}{section}{2.2 Caracterização da Empresa}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2.1. Histórico da Empresa}}
+\addcontentsline{toc}{section}{2.2.1. Histórico da Empresa}
+\vspace{-0.7\baselineskip}
+
+A AgroIoT Brasil é uma startup fictícia criada em 2025, nascida do ambiente acadêmico, com o propósito de democratizar o acesso à automação agrícola entre pequenos e médios produtores. A iniciativa surgiu da observação das dificuldades enfrentadas por agricultores familiares, principalmente no que diz respeito ao manejo manual da irrigação e à falta de tecnologias acessíveis no campo. 
+
+A empresa iniciou suas atividades com uma equipe reduzida, composta por profissionais das áreas de engenharia, agronomia e tecnologia da informação, atuando em regime de colaboração.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2.2. Atividades da Empresa}}
+\addcontentsline{toc}{section}{2.2.2. Atividades da Empresa}
+\vspace{-0.7\baselineskip}
+
+A AgroIoT Brasil dedica-se à pesquisa, desenvolvimento e comercialização de kits de irrigação automatizada com monitoramento remoto, compostos por:
+
+\listarecuada{
+    \item Sensores de umidade do solo, luminosidade, temperatura e umidade do ar e outros.
+    \item Módulos de conectividade (ESP32 + Arduino Cloud via MQTT).
+    \item Dashboards para visualização de dados antigos e em tempo real, além de transmissão continua via bluetooth.
+    \item Integração com assistente virtual Alexa.
+    \item Setor Administrativo e Financeiro.
+}
+
+Além da oferta dos kits, a empresa também fornece serviços como instalação, suporte técnico e treinamento prático para os usuários.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2.3. Mercado Consumidor}}
+\addcontentsline{toc}{section}{2.2.3. Mercado Consumidor}
+\vspace{-0.7\baselineskip}
+
+O público-alvo da AgroIoT Brasil inclui:
+
+\listarecuada{
+    \item Agricultores familiares.
+    \item Horticultores urbanos.
+    \item Cooperativas agroecológicas.
+    \item Proprietários de pequenas e médias propriedades rurais.
+    \item Instituições de ensino técnico com foco em práticas agrícolas.
+}
+Esses consumidores compartilham características como limitação de recursos financeiros, escassez de mão de obra e interesse crescente por soluções tecnológicas de fácil adoção.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2.4. Concorrência}}
+\addcontentsline{toc}{section}{2.2.4. Concorrência}
+\vspace{-0.7\baselineskip}
+
+No mercado brasileiro, empresas como Netafim e Toro dominam o setor de irrigação de precisão com soluções voltadas para grandes lavouras e projetos agrícolas de grande escala. Em contraste, a AgroIoT Brasil foca em atender um nicho ainda pouco explorado: o pequeno e médio produtor rural. Sua proposta de valor reside em: 
+
+\listarecuada{
+    \item Soluções personalizadas e de baixo custo.
+    \item Suporte técnico acessível.
+    \item Capacitação com linguagem didática e aplicação prática.
+}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.2.5. Organograma}}
+\addcontentsline{toc}{section}{2.2.5. Organograma} 
+\vspace{-0.7\baselineskip}
+
+A estrutura organizacional da AgroIoT Brasil é enxuta e baseada em metodologias ágeis. A empresa se divide em cinco núcleos principais:
+
+\listarecuada{
+    \item Diretoria Executiva e Estratégica – responsável pela tomada de decisões e definição de metas.
+    \item Departamento de Engenharia e Desenvolvimento – voltado à criação e teste de novas soluções.
+    \item Setor Comercial e Marketing – encarregado da divulgação e relacionamento com clientes.
+    \item Atendimento ao Cliente e Suporte Técnico – apoio contínuo aos usuários.
+    \item Setor Administrativo e Financeiro – gestão de recursos e planejamento financeiro.
+}
+
+A estrutura colaborativa permite flexibilidade, inovação contínua e forte aproximação com o público atendido.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.3. Proposta de Trabalho}}
+\addcontentsline{toc}{section}{2.3. Proposta de Trabalho} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.3.1. Método do Trabalho}}
+\addcontentsline{toc}{section}{2.3.1. Método do Trabalho} 
+\vspace{-0.7\baselineskip}
+
+O desenvolvimento do projeto seguirá uma abordagem de pesquisa aplicada com ênfase em metodologia experimental, utilizando o modelo incremental com práticas de desenvolvimento ágil (Scrum). Isso permitirá validações contínuas por meio de ciclos curtos de desenvolvimento, testes práticos e refinamento da solução com base no feedback obtido em campo. 
+
+\selectfont\textbf{Levantamento de dados:}
+
+Os dados necessários para o desenvolvimento do sistema foram (ou serão) obtidos por meio de:
+
+\listarecuada{
+    \item Entrevistas com agricultores familiares, para entender as principais dificuldades enfrentadas com a irrigação manual.
+    \item Observação direta em pequenas propriedades rurais, analisando padrões de irrigação, tipo de cultivo e uso atual de tecnologias.
+    \item Pesquisa bibliográfica em fontes acadêmicas, artigos técnicos e manuais sobre sensores de umidade, automação agrícola e sistemas IoT.
+}
+
+\selectfont\textbf{Metodologia de desenvolvimento:}
+
+Será utilizado o modelo incremental com base em Scrum, permitindo:
+
+\listarecuada{
+    \item Divisão do projeto em sprints quinzenais.
+    \item Autoavaliação de execução individual.
+    \item Protótipos evolutivos com incrementos funcionais a cada ciclo.
+}
+
+\selectfont\textbf{Ferramentas e técnicas de modelagem:}
+
+\listarecuada{
+    \item Diagramas de caso de uso, sequência e classes (UML) para modelagem dos requisitos e funcionalidades.
+    \item Arduino IDE para desenvolvimento do código embarcado.
+    \item Arduino Cloud para interface com a nuvem e dashboards de visualização.
+    \item Fritzing para o protótipo esquemático do circuito eletrônico (Anexo II).
+    \item TinkerCAD com YouTube para simulações iniciais do projeto.
+    \item Comandos via Alexa para a acessibilidade das funções.
+}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.3.2. Previsão e Alocação de Recursos (Humanos e Materiais)}}
+\addcontentsline{toc}{section}{2.3.2. Previsão e Alocação de Recursos (Humanos e Materiais)} 
+\vspace{-0.7\baselineskip}
+
+\selectfont\textbf{Recursos humanos:}
+
+\listarecuada{
+    \item Desenvolvedor Full Stack / Maker (responsável por programação, testes, integração com nuvem).
+    \item Engenheiro eletrônico ou técnico em eletrônica (auxílio com sensores, circuitos e calibração).
+    \item Especialista de campo (auxílio na aplicação em propriedade rural e coleta de feedback).
+    \item Coordenador do projeto (o próprio autor, responsável pelo planejamento, cronograma e documentação).
+    \item Apoio eventual de professores orientadores e colegas da área agrícola.
+}
+
+\selectfont\textbf{Recursos materiais:}
+
+\listarecuada{
+    \item Placas ESP32 DevKit V1.  
+    \item Esp32 Base Board.
+    \item Sensores de umidade do solo.
+    \item Sensores de Temperatura e umidade do ar (DHT11).
+    \item Luminosidade (LDR).
+    \item Módulos relé de 5v.
+    \item Válvulas solenoides 12V.
+    \item Multiplexador CD74HC4067.
+    \item Painéis solares 50W / 12V + Reguladores de carga de 20A a 30A. 
+    \item Bateria selada ou Li-Ion de 8A. 
+    \item Fontes de alimentação de 12v e 5v para os sensores.
+    \item Display LCD I2C 16x2. 
+    \item Conectores de Derivação Emenda Wago: Modelo 221 ou 222.
+    \item Fios bipolar paralelo cristal de 1,5mm² ou 2mm²
+    \item Caso compre um relé com transistor ligado de forma diferente, você vai precisar de: 
+    \begin{enumerate}
+        \item Outro transistor, ele é o BC547.
+        \item Um resistor de 10k Ohms.
+        \item Placa De Circuito Perfurada Fenolite (O tamanho depende da necessidade).  
+    \end{enumerate}
+    \item Caixas de proteção IP65 para uso externo.
+    \item Canos de 20 ou 25 mm com conectores (dependendo da necessidade).
+    \item Ferramentas de desenvolvimento (gratuitas ou open-source).
+    \item Conta ativa na plataforma Arduino Cloud.
+    \item Ferramentas como: Alicate de ponta e de corte, chave de fenda e estrela, multímetro, chave de teste elétrico, filtro de linhas com várias tomadas para testes, estilete, cabo extensor de USB de qualidade, são opcionais, mas ajudaram no decorrer da construção.
+}
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.3.3. Cronograma de Trabalho (Diagrama de Gantt)}}
+\addcontentsline{toc}{section}{2.3.3. Cronograma de Trabalho (Diagrama de Gantt)} 
+\vspace{-0.7\baselineskip}
+
+O projeto foi planejado para ocorrer em 6 meses, conforme abaixo:
+
+\minhaimagemcomfonte{12cm}{capitulos/img/2_3_3_Cronograma_gantt}{Cronograma de Execução do Projeto}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.3.4. Previsão Orçamentária}}
+\addcontentsline{toc}{section}{2.3.4. Previsão Orçamentária} 
+\vspace{-0.7\baselineskip}
+
+Com base nos recursos materiais de automação mencionados, estima-se um investimento mínimo de R\$ 1.160,00, distribuído da seguinte forma:
+
+\begin{table}[H]
+\centering
+\captionsetup{justification=centering}
+\caption{\textbf{Distribuição estimada de custos dos materiais do projeto}}
+\vspace{-0.5em}
+\footnotesize
+\renewcommand{\arraystretch}{1.2} % espaçamento entre linhas
+
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c c}
+\toprule
+\textbf{ITEM} & \textbf{UNI.} & \textbf{PREÇO MÉDIO (BRL)} \\
+\midrule
+Placa ESP32 com Wi-Fi, Bluetooth ESP32S IDE Dual Core - Dev Kit V1 + Cabo Micro USB & 1 & R\$ 90,00 \\
+Placa de Expansão para ESP32-DevKit V1 30 Pinos (Base Board) & 1 & R\$ 133,00 \\
+Sensores de umidade do solo & 1 ou mais & R\$ 80,00 \\
+Sensores de temperatura e umidade do ar (DHT11) & 1 & R\$ 22,00 \\
+Módulo Sensor de Luminosidade Fotoresistor LDR & 1 & R\$ 10,00 \\
+Módulos relé 1 canal de 5V & 1 ou mais & R\$ 14,00 \\
+Válvulas solenoides 12V & 1 ou mais & R\$ 55,00 \\
+Multiplexador CD74HC4067 & 1 & R\$ 16,00 \\
+Painéis solares 50W / 12V + Regulador de carga de 20A & 1 & R\$ 120,00 \\
+Painéis solares 50W / 12V (adicional) & 1 & R\$ 70,00 \\
+Bateria selada 12V / 20Ah & 1 & R\$ 300,00 \\
+Fonte de alimentação de 12V 2A para sensores & 1 & R\$ 40,00 \\
+Fonte de alimentação de 5V 2A para sensores & 1 & R\$ 30,00 \\
+Display LCD I2C 16x2 & 1 & R\$ 40,00 \\
+Caixas de proteção IP65 para uso externo & 1 & R\$ 100,00 \\
+Conta ativa na plataforma Arduino Cloud & 1 & R\$ 40,00 \\
+Ferramentas de desenvolvimento (open-source) & 1 & Gratuito \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{table}
+
+Com base nos recursos materiais elétricos e de estrutura para a construção do projeto em ambiente rural (Não incluso no valor acima por ser algo escalável):
+
+\begin{table}[H]
+\centering
+\captionsetup{justification=centering}
+\caption{\textbf{Materiais adicionais para montagem e instalação do sistema}}
+\vspace{-0.5em}
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c c}
+\toprule
+\textbf{ITEM} & \textbf{UNI.} & \textbf{PREÇO MÉDIO (BRL)} \\
+\midrule
+Canos de 20 ou 25 mm (PVC) & 1 ou mais & R\$ 20,00 à 40,00 \\
+Conectores de Derivação Emenda Wago: 221 ou 222 & 1 ou mais & R\$ 8,00 \\
+Fios bipolar paralelo cristal de 1{,}5mm² ou 2mm² & 1m & R\$ 7,00 \\
+Conectores para canos & 1 ou mais & R\$ 5,00 à 20,00 \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{table}
+
+Observa-se que na coluna “UNI” tem algo de diferente, como o dado de “1 ou mais”, que indica que a dimensão do projeto pode ser escalonada pelo produtor cliente. Abaixo é mostrado na tabela, em um grau energético, como isso seria dimensionado em capacidade de baterias e quantidade de placas solares:
+
+\begin{table}[H]
+\centering
+\captionsetup{justification=centering}
+\caption{\textbf{Dimensionamento energético estimado conforme a quantidade de plantas automatizadas}}
+\vspace{-0.5em}
+\scriptsize  % Fonte menor que footnotesize (~9pt)
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}m{1.0cm}
+                                >{\centering\arraybackslash}m{1.2cm}
+                                >{\centering\arraybackslash}m{1.2cm}
+                                >{\centering\arraybackslash}m{2.0cm}
+                                >{\centering\arraybackslash}m{1.6cm}
+                                >{\centering\arraybackslash}m{1.6cm}
+                                >{\centering\arraybackslash}m{1.0cm}
+                                >{\centering\arraybackslash}m{1.6cm}
+                                >{\centering\arraybackslash}m{1.2cm}}
+\toprule
+\textbf{Plantas (Kit)} & \textbf{Consumo (Ah/dia)} & \textbf{Bateria Mín. (Ah)} & \textbf{Capacidade Painel solar} & \textbf{Sobra c/ 1x 50W} & \textbf{Sobra c/ 2x 50W} & \textbf{Descarga} & \textbf{Controlador} & \textbf{Horas} \\
+\midrule
+1   & 5{,}21  & 10{,}42 & 1 painel de 50W   & +15{,}59 Ah & +35{,}99 Ah & 50\% & PWM 20A & 14h \\
+2   & 5{,}41  & 10{,}82 & 1 painel de 50W   & +15{,}39 Ah & +35{,}79 Ah & 50\% & PWM 20A & 14h \\
+10  & 7{,}21  & 14{,}42 & 1 painel de 50W   & +13{,}59 Ah & +33{,}99 Ah & 50\% & PWM 20A & 14h \\
+20  & 9{,}21  & 18{,}42 & 1 painel de 50W   & +11{,}59 Ah & +31{,}99 Ah & 50\% & PWM 20A & 14h \\
+30  & 11{,}21 & 22{,}42 & 2 painéis de 50W  & +9{,}59 Ah  & +29{,}99 Ah & 50\% & PWM 20A & 14h \\
+40  & 13{,}21 & 26{,}42 & 2 painéis de 50W  & +7{,}59 Ah  & +27{,}99 Ah & 50\% & PWM 20A & 14h \\
+50  & 15{,}21 & 30{,}42 & 2 painéis de 50W  & +5{,}59 Ah  & +25{,}99 Ah & 50\% & PWM 20A & 14h \\
+75  & 20{,}21 & 40{,}42 & 2 painéis de 50W  & \textcolor{red}{-1{,}41 Ah}  & +19{,}59 Ah & 50\% & PWM 20A & 14h \\
+100 & 25{,}21 & 50{,}42 & 3 painéis de 50W* & \textcolor{red}{-6{,}41 Ah}  & +14{,}59 Ah & 50\% & PWM 20A & 14h \\
+120 & 29{,}21 & 58{,}42 & 3 painéis de 50W* & \textcolor{red}{-10{,}41 Ah} & +10{,}59 Ah & 50\% & PWM 20A & 14h \\
+150 & 34{,}21 & 68{,}42 & 4 painéis de 50W* & \textcolor{red}{-15{,}41 Ah} & +5{,}59 Ah  & 50\% & PWM 20A & 14h \\
+180 & 39{,}21 & 78{,}42 & 4 painéis de 50W* & \textcolor{red}{-20{,}41 Ah} & +0{,}59 Ah  & 50\% & PWM 20A & 14h \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+{\scriptsize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{table}
+
+Considerações importantes sobre a tabela de dimensionado em capacidade de baterias e quantidade de placas solares:
+
+\begin{itemize}
+  \setlength\itemsep{6pt} % Espaço entre itens
+  \setlength\parskip{0pt}
+  \setlength\parsep{0pt}
+  \item O controlador de carga PWM de 20A foi respeitado como constante e nunca ultrapassado em termos de 240W de Corrente de carga vinda dos painéis. Capacidade segura de operação com as baterias e painéis previstos.
+  
+  \item Todos os consumos dos componentes foram multiplicados pelas 14 horas de funcionamento diário, exceto os casos onde o tempo de acionamento é menor (como os relés e válvulas que funcionam apenas 10 minutos por dia).
+
+  \item A bateria mínima indicada é o dobro do consumo diário (consumo ÷ 0,5), garantindo que você não descarregue mais do que 50\% da bateria para preservar a vida útil (Regra de segurança máxima).
+  
+  \item Número de painéis indicado para manter folga de energia e garantir autonomia, considerando 5h de sol pleno.
+
+  \item Sobra de energia negativa (-) indica que o painel solar não é suficiente para suprir o consumo diário sozinho.
+
+  \item Sobra positiva (+) indica energia extra disponível para recarga e eventual segurança.
+
+  \item A "sobra de energia" mostra quanto ainda sobraria de energia solar por dia, considerando painéis de 50W.
+
+  \item Situações com mais de 20 kits já recomendam o uso de 2 painéis de 50W para manter folga.
+  
+\end{itemize}
+
+A execução do projeto exigirá recursos humanos como mão de obra especializada. A previsão orçamentária do projeto contempla:
+
+\listarecuada{
+    \item Desenvolvimento e suporte técnico (R\$ 2.277,00).
+    \item Engenheiros eletrônicos e técnicos em suporte (R\$ 2.277,00).
+    \item Diretoria Executiva, Estratégica e Financeiro (R\$ 2.277,00).
+    \item Capacitação e marketing (R\$ 1.518,00).
+}
+
+O investimento estimado inicial para a elaboração do projeto é de aproximadamente R\$10.000,00. Levando em consideração o acréscimo de 500 reais para a compra de alguns materiais elétricos e de estrutura. Uma vez feito, o valor poderia ser passado para o consumidor final em formato de serviço de assinatura com um valor simbólico de R\$ 99,99 onde uma parcela mensal seria posta para que seja paga mensalmente (igual streaming de vídeos).
+
+É relevante apontar que, com o passar do tempo, o projeto fique mais acessível à medida que novos agricultores entrem no programa. O orçamento mensal considera o custo com materiais, testes, eventuais substituições de componentes e um valor reservado para apoio técnico e capacitação de usuários durante o período de validação do sistema.
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.4. O Sistema Atual}}
+\addcontentsline{toc}{section}{2.4. O Sistema Atual} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.4.1. Funcionamento do sistema atual}}
+\addcontentsline{toc}{section}{2.4.1. Funcionamento do sistema atual} 
+\vspace{-0.7\baselineskip}
+
+O sistema atual é uma solução automatizada de monitoramento e controle de irrigação desenvolvida com base no microcontrolador ESP32 DevKit V1, integrando sensores ambientais e atuadores com conectividade à Arduino Cloud para visualização e controle remoto.
+
+\selectfont\textbf{Componentes e funcionamento geral:}
+
+\listarecuada{
+    \item Microcontrolador principal: ESP32, que atua como o cérebro do sistema, executando a lógica de controle, comunicação e integração com a nuvem.
+    \item Placa expansora: ajuda na utilização de fios no lugar de jumpers, para contatos mais confiáveis e comunicações não duvidosas entre circuitos.
+}
+
+\selectfont\textbf{Sensores conectados:}
+
+\listarecuada{
+    \item Sensores de umidade do solo: coletam dados do nível de umidade do solo.
+    \item Sensor DHT11: mede temperatura e umidade do ar.
+    \item Sensor LDR: detecta luminosidade ambiente.
+}
+
+\selectfont\textbf{Atuadores e controle:}
+
+\listarecuada{
+    \item Módulos relé: acionam válvulas solenoides de 12V responsáveis pela irrigação.
+    \item Válvulas solenoides: controlam o fluxo de água para irrigação, ligadas via relés.
+}
+
+\selectfont\textbf{Expansor do número de pinos analógicos/digitais:}
+
+\listarecuada{
+    \item Multiplexador CD74HC4067: permite ler múltiplos sensores de umidade usando apenas 05 portas analógicas do ESP32, otimizando recursos do microcontrolador. Pode ser ligado no máximo 6 multiplexadores, resultando em 96 sensores totais em uma ESP32. (É recomendável usar resistores pull-down).
+}
+
+\selectfont\textbf{Interface e visualização:}
+
+\listarecuada{
+    \item Display LCD I2C 16x2: exibe informações locais como valores de sensores ou status do sistema.
+    \item Comunicação Bluetooth: exibe informações contínuas das leituras por intermédio de aplicativo terminal para dispositivos seriais.
+    \item Arduino Cloud: permite visualizar os dados coletados e acionar manualmente a irrigação de forma remota, por meio de dashboards online.
+    \item Power BI e Google Sheets: Permite a análise de dados de forma mais detalhada, uma visão mais clara e de fácil compreensão dos dados.
+}
+
+\selectfont\textbf{Conectividade:}
+
+\listarecuada{
+    \item A ESP32 conecta-se à internet via Wi-Fi usando credenciais armazenadas em \textit{arduino\_secrets.h}.
+    \item As variáveis e propriedades são sincronizadas com a Arduino Cloud conforme definidas em \textit{thingProperties.h}.
+    \item A assistente virtual Alexa foi integrada por meio da plataforma Arduino Cloud com ajuda de uma Skills do próprio aplicativo Alexa.
+}
+
+\selectfont\textbf{Banco de dados:}
+
+\listarecuada{
+    \item Bibliotecas de integração: o uso de credenciais para armazenamentos no google sheets com ajuda de: \textit{WiFi.h}, \textit{HTTPClient.h} e \textit{ArduinoJson.h}.
+}
+
+\selectfont\textbf{Alimentação e energia:}
+
+\listarecuada{
+    \item Fontes de 12V e 5V alimentam sensores e módulos.
+    \item Há previsão de uso de painéis solares e baterias seladas para tornar o sistema autônomo energeticamente. 
+    \item Economia de energia: utilização de função especial do ESP32 para diminuir o consumo de energia para o mínimo com ajuda de: \textit{esp\_sleep\_enable\_timer\_wakeup()} e \textit{esp\_deep\_sleep\_start()}.
+}
+
+\selectfont\textbf{Operação:}
+
+O projeto utiliza uma placa microcontroladora ESP32 DevKit V1 como cérebro central do sistema. Essa placa é responsável por controlar, ler e tomar decisões com base em dados coletados de diversos sensores ambientais, integrando automação, monitoramento e eficiência energética em um único sistema de irrigação inteligente.
+
+O sistema lê ciclicamente os sensores utilizando a função millis() (Não Bloqueante), já que o uso da função delay() (Bloqueante), não é recomendado para projetos grandes por causa do travamento das outras execuções que devem continuar funcionando; para a leitura dos dados do solo, o sistema utiliza sensores de umidade posicionados em diferentes pontos da plantação ou jardim. Como o número de sensores necessários pode ser alto, o projeto emprega multiplexadores CD74HC4067, que permitem conectar até 16 sensores analógicos em cinco entrada da ESP32. Isso amplia significativamente a quantidade de sensores que podem ser lidos, otimizando o uso dos pinos disponíveis na placa. 
+
+Além da umidade do solo, o sistema também realiza monitoramento climático local, por meio do sensor DHT11, que mede a temperatura e a umidade do ar, e do sensor de luminosidade LDR, que identifica a intensidade da luz ambiente. Com essas informações, o sistema consegue tomar decisões mais inteligentes sobre o momento ideal para irrigar, evitando, por exemplo, ativar as válvulas durante chuvas ou períodos muito úmidos, e claro evitar irrigação em momentos de alta luminosidade, devido ao horário quente, pode acabar sendo prejudicial a planta receber água em altas temperaturas.
+
+A irrigação é feita por meio de válvulas solenoides 12V, que são ativadas ou desativadas por módulos relé controlados pela ESP32. Cada válvula pode ser conectada a um setor ou linha de irrigação diferente. O acionamento é automatizado com base nos níveis de umidade lidos, mas pode ser ajustado ou monitorado remotamente por meio de interações no Dashboard da Arduino Cloud ou comandos de voz via Alexa. 
+
+A alimentação elétrica do projeto é bem dimensionada para a quantidade de sensores da preferência do cliente e para proteger a bateria para ser utilizada por muito tempo, garantindo autonomia e operação off-grid, sendo distribuído por fontes de alimentação de 5V e 12V, dependendo da infraestrutura disponível. O sistema é montado em caixas de proteção IP65, para garantir durabilidade e segurança em ambientes externos.
+
+Para otimizar ainda mais o consumo de energia, o sistema utiliza a funcionalidade de sono profundo (deep sleep) da ESP32. Essa técnica permite que o microcontrolador entre em um estado de baixo consumo elétrico quando não está realizando leituras ou acionamentos, como durante a madrugada ou entre ciclos de irrigação. Supondo que o sistema permaneça em deep sleep por 10 horas contínuas por dia, o consumo de energia da placa pode cair de cerca de 160 mA (modo ativo) para menos de 10 µA (modo deep sleep). Isso representa uma redução de mais de 99\% no consumo elétrico da ESP32 durante esse período, resultando em significativa economia de energia e maior autonomia da bateria. Em um sistema alimentado por bateria e painel solar, essa estratégia é essencial para manter o funcionamento contínuo mesmo em dias nublados ou com baixa radiação solar, reduzindo a dependência de recargas frequentes e aumentando a confiabilidade da automação em campo. 
+
+Essa integração torna o sistema ideal para aplicações em agricultura de precisão, hortas urbanas, jardins automatizados e estudos ambientais. 
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{2.4.2. Problemas do sistema atual}}
+\addcontentsline{toc}{section}{2.4.2. Problemas do sistema atual} 
+\vspace{-0.7\baselineskip}
+
+Apesar de o sistema atual representar um avanço no monitoramento e controle de irrigação, ele ainda apresenta algumas limitações e desafios que justificam a busca por melhorias e por um novo sistema mais robusto e confiável:
+
+\vspace*{0.5em}  
+\selectfont\textbf{Dependência de conexão Wi-Fi local:}
+\vspace*{0.5em} 
+
+O funcionamento do sistema depende diretamente da conectividade com redes Wi-Fi configuradas previamente. Em áreas rurais ou locais com instabilidade de sinal, isso pode comprometer a atualização de dados na nuvem e o controle remoto, além do envio dos dados para o banco. 
+
+\vspace*{0.5em} 
+\selectfont\textbf{Falta de tomada de decisão inteligente:}
+\vspace*{0.5em} 
+
+O sistema atual aciona as válvulas com base em valores de sensores pré-definidos (como umidade menor que certo valor). No entanto, não há algoritmos mais complexos de inteligência artificial, aprendizado ou lógica fuzzy para adaptar a irrigação a diferentes situações climáticas, tipos de solo ou culturas específicas. 
+
+\vspace*{0.5em} 
+\selectfont\textbf{Interface limitada para o usuário local:}
+\vspace*{0.5em} 
+
+Embora haja um display LCD 16x2, ele mostra uma quantidade limitada de informações. Em caso de falha na internet, o usuário local não consegue acessar históricos, diagnósticos ou gráficos detalhados diretamente pelo sistema.
+
+\vspace*{0.5em} 
+\selectfont\textbf{Pouca modularidade e escalabilidade:}
+\vspace*{0.5em} 
+
+A estrutura atual, mesmo com o uso do multiplexador, exige ajustes manuais no código para adicionar mais sensores ou válvulas. Isso limita a escalabilidade sem intervenções técnicas constantes. 
+
+\vspace*{0.5em} 
+\selectfont\textbf{Segurança e autenticação simplificadas:}
+\vspace*{0.5em} 
+
+As credenciais Wi-Fi e o acesso à nuvem são armazenados de forma básica, sem autenticação avançada ou criptografia de dados trafegados na hora de ir para o banco por protocolo HTTP, exceto os dados que vão para a Arduino cloud por meio de protocolo MQTT, o que pode ser um problema em termos de segurança da informação. 
+
+\vspace*{0.5em} 
+\selectfont\textbf{Manutenção e diagnóstico dificultados:}
+\vspace*{0.5em} 
+
+Não há um sistema de logs ou notificações locais/online para avisar falhas (como sensor desconectado, válvula que não responde ou queda de energia). Isso dificulta a manutenção preventiva e corretiva do sistema.
+
+\vspace*{0.5em} 
+\selectfont\textbf{Ausência de armazenamento local de dados:}
+\vspace*{0.5em} 
+
+Sem conexão com a internet, o sistema não registra os dados em memória local para posterior sincronização. Isso pode gerar perda de informações importantes em caso de falhas de rede.
+
+\vspace*{0.5em} 
+\selectfont\textbf{Uso de sensores baratos de baixa precisão:}
+\vspace*{0.5em} 
+
+O sistema usa sensores de umidade do solo de baixo custo, que são acessíveis, mas apresentam leituras instáveis e pouca durabilidade. São afetados por interferências elétricas, temperatura e oxidação, exigindo calibração frequente. Isso compromete a precisão dos dados e pode levar à irrigação incorreta.

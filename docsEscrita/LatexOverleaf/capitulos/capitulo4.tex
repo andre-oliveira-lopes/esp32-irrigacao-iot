@@ -1,0 +1,52 @@
+% CAPÍTULO 4 – CONCLUSÃO
+
+\vspace*{-1.0em} % Ajuste  
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{4. CONCLUSÃO}}
+\addcontentsline{toc}{section}{4. CONCLUSÃO}
+\vspace{-0.7\baselineskip}
+
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{4.1. Reflexões e comparação entre objetivos iniciais x alcançados}}
+\addcontentsline{toc}{section}{4.1. Reflexões e comparação entre objetivos iniciais x alcançados}
+\vspace{-0.7\baselineskip}
+
+Ao iniciar o desenvolvimento deste Trabalho de Conclusão de Curso, estabeleceu-se como objetivo geral a criação de um sistema automatizado de irrigação capaz de otimizar o uso da água e da energia elétrica em pequenos e médios cultivos, a partir da coleta de dados de sensores e da possibilidade de controle remoto do sistema. Para viabilizar esse objetivo, foram definidos seis objetivos específicos que, em conjunto, delinearam os caminhos tecnológicos e funcionais do sistema proposto.
+
+Após os períodos letivos de desenvolvimento, estudo técnico e modelagem de soluções, é possível realizar uma análise crítica sobre os resultados obtidos até aqui e a correspondência entre o que foi planejado e o que foi alcançado.
+
+Embora o sistema ainda não esteja fisicamente implementado, a modelagem completa foi realizada com êxito. Foram definidas a linguagem de programação (C/C++ com Arduino), a plataforma de nuvem (Arduino IoT Cloud), o hardware central (ESP32), o uso de sensores e o ambiente operacional. A solução proposta é viável tecnicamente e condiz com o objetivo inicial de otimizar recursos naturais e possibilitar controle remoto, ou seja, o objetivo geral foi atendido em sua totalidade dentro do escopo de projeto e modelagem. 
+
+Durante o desenvolvimento do projeto, os objetivos específicos foram majoritariamente alcançados conforme o planejado. O sistema foi modelado para monitorar continuamente a umidade do solo em diferentes pontos, utilizando sensores de baixo custo conectados à ESP32, com possibilidade de expansão. A lógica de controle automático das válvulas de irrigação com base nos níveis de umidade foi definida e a ESP32 está preparada para realizar essa função de forma autônoma. Também foi implementada a ampliação da capacidade de monitoramento por meio do uso de multiplexadores, o que permite a leitura de múltiplos sensores com apenas uma placa controladora. Quanto ao consumo energético, embora o uso de energia solar tenha sido considerado e o modo de economia da ESP32 estudado e implementado, essa parte ainda depende de testes físicos com painéis solares, que acabou não sendo plenamente implementada até o momento devido aos recursos fiscais baixos, entretanto foi feito cálculos com base em dados matemáticos, levando em consideração consumo de equipamentos e produção de energia que pode ser visto no item 2.3.4. O sistema também foi modelado para permitir o monitoramento remoto via internet, com apoio da plataforma Arduino IoT Cloud, garantindo acesso aos dados em tempo real e controle remoto. Por fim, a escolha por sensores acessíveis foi compensada com o uso de lógica de controle e redundância, assegurando maior confiabilidade nas leituras mesmo com dispositivos de menor precisão.
+
+\vspace*{-1.0em} % Ajuste  
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{4.2. Vantagens e desvantagens do sistema}}
+\addcontentsline{toc}{section}{4.2. Vantagens e desvantagens do sistema}
+\vspace{-0.7\baselineskip}
+
+O sistema automatizado de irrigação proposto apresenta uma série de vantagens que o tornam uma solução viável, eficiente e adaptável para pequenos e médios produtores. Dentre os principais benefícios, destaca-se a eficiência no uso da água, uma vez que o sistema realiza a irrigação de maneira inteligente, apenas quando os sensores detectam níveis críticos de umidade no solo e em momentos que o tempo não está muito quente para não prejudicar a planta. Isso evita o desperdício de água e danos aos tecidos da árvore, respectivamente, e claro promove o uso racional dos recursos hídricos e qualidade a planta. Além disso, o sistema foi pensado para operar com baixo consumo energético, utilizando a funcionalidade de economia de energia da ESP32 e prevendo a integração com energia solar, o que garante uma operação sustentável e de baixo custo a longo prazo.
+
+A escolha de componentes de baixo custo, como sensores analógicos de umidade e multiplexadores, permite que a solução seja financeiramente acessível, mesmo para produtores com recursos limitados. Outro ponto forte é a capacidade de monitoramento remoto por meio da plataforma Arduino IoT Cloud, que possibilita o acesso aos dados e o controle do sistema pela internet, oferecendo comodidade e controle ao usuário, mesmo à distância. O projeto também é escalável, permitindo a expansão do número de sensores sem a necessidade de novas placas, graças ao uso de multiplexadores CD74HC4067. A facilidade de manutenção e atualização do sistema, garantida pela ampla documentação da linguagem C/C++ e da comunidade Arduino, também contribui para sua robustez e longevidade.
+
+Por outro lado, o sistema também apresenta algumas desvantagens que merecem ser consideradas. A dependência de conexão Wi-Fi pode ser um fator limitante em áreas rurais onde a cobertura de internet é instável ou inexistente. Nesse caso, seriam necessárias soluções complementares, como comunicação por rádio (LoRa) ou armazenamento local de dados. Outro ponto delicado está na precisão dos sensores analógicos de umidade, que, por serem de baixo custo, podem apresentar variações nas leituras e menor durabilidade, exigindo estratégias como lógica de redundância ou calibração periódica.
+
+A dependência da energia solar também impõe um desafio adicional, já que a eficiência do sistema pode ser comprometida em dias nublados ou em regiões com baixa insolação, o que requer um bom planejamento do sistema de energia. Além disso, a montagem e instalação do sistema exigem conhecimentos básicos de eletrônica e redes, o que pode representar uma barreira para usuários sem formação técnica. Embora o custo dos componentes eletrônicos seja baixo, o investimento inicial em painéis solares e baterias pode ser significativo. Por fim, a capacidade de processamento e memória da ESP32 pode limitar a inclusão de funcionalidades mais avançadas, especialmente em cenários com um número elevado de sensores ou necessidade de processamento local complexo, isso pode fazer o uso de mais de uma ESP32.
+
+Apesar dessas limitações, os benefícios superam as desvantagens, especialmente quando se considera a proposta do projeto de oferecer uma solução acessível, eficiente e sustentável para automação da irrigação. A escolha dos componentes e a modelagem do sistema foram feitas com foco na viabilidade prática, buscando o melhor equilíbrio entre custo e benefício.
+
+\vspace*{-1.0em} % Ajuste  
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{4.3. Trabalhos futuros}}
+\addcontentsline{toc}{section}{4.3. Trabalhos futuros}
+\vspace{-0.7\baselineskip}
+
+Uma das principais possibilidades está na implementação efetiva do sistema de alimentação por energia solar, com o dimensionamento ideal de painéis e baterias, testes práticos de autonomia e mecanismos de proteção e monitoramento de carregamento inteligente, o que tornará o sistema mais autossuficiente e sustentável. 
+
+Outra frente importante para evolução é o aprimoramento do modelo de controle de irrigação, incorporando variáveis climáticas externas, como temperatura e umidade do ar, previsão do tempo, por meio de APIs meteorológicas. Isso permitiria um sistema ainda mais inteligente, capaz de antecipar ou adiar irrigações com base em condições ambientais previstas, otimizando ainda mais o uso da água. 
+
+Também se identifica como relevante a possibilidade de desenvolver uma solução para situações em que o acesso à internet é limitado ou inexistente, futuros desenvolvimentos poderiam explorar a comunicação via rádio frequência (como LoRa) ou a armazenagem local de dados em cartões SD, garantindo o funcionamento contínuo do sistema mesmo em regiões remotas. 
+
+A integração do sistema de irrigação com outras soluções agrícolas, como monitoramento de pragas e qualidade das plantas por processamento de imagem, controle de temperatura (Caso seja irrigação em estufas) ou automação de fertilização (fertirrigação), pode formar um ecossistema agrícola inteligente, potencializando ainda mais a produtividade e sustentabilidade das plantações. Esses avanços, embora não incorporados, representam um caminho natural de evolução e podem ser explorados em projetos futuros, contribuindo para um modelo de agricultura de precisão acessível, eficiente e escalável. 
+
+Além das possibilidades já previstas, outras ideias promissoras podem ser exploradas em versões futuras do sistema. A adição de sensores como o de chuva, fluxo de água e proximidade da caixa d’água pode refinar ainda mais o controle e a automação. Recursos como o sensor RTC (Relógio de Tempo Real trariam maior precisão e histórico ao sistema. A instalação de LEDs de indicação pode ajudar na sinalização visual de falhas ou estados de funcionamento.
+
+Por fim, para ampliar a conectividade, o uso de um módulo com chip de internet permitiria comunicação em áreas sem Wi-Fi. Também se vislumbra a criação de um aplicativo exclusivo chamado Deméter, em homenagem à deusa da agricultura, e a aplicação de inteligência artificial tanto para interações com o agricultor quanto para prever necessidades de irrigação. Outras ideias incluem o uso de sensores a laser com LDR para proteção da plantação contra animais e a implementação de bombas solares, reforçando o compromisso com soluções sustentáveis e inteligentes para o campo. 
+
+\vspace*{-1.0em} % Ajuste  

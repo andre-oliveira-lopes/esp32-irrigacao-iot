@@ -1,0 +1,88 @@
+partition lerComandosDaPlanilha {
+  :Lê o comando do LED da célula M2 da aba "dados";
+  :Remove espaços em branco do comando do LED;
+
+  :Lê o comando do relé A da célula N2 da aba "dados";
+  :Remove espaços em branco do comando do relé A;
+
+  :Lê o comando do relé B da célula O2 da aba "dados";
+  :Remove espaços em branco do comando do relé B;
+
+  :Imprime no Monitor Serial o comando do LED;
+  :Imprime no Monitor Serial o comando do Rele A;
+  :Imprime no Monitor Serial o comando do Rele B;
+}
+
+partition atualizarValoresPlanilhaNuvem {
+  'Determina o estado desejado do LED e dos relés:
+  if (comando do LED é "1" OU led_teste é verdadeiro) then (sim)
+    :estadoDesejadoLed = verdadeiro;
+  else (não)
+    :estadoDesejadoLed = falso;
+  endif
+
+  if (comando do Rele A é "1" OU releA é verdadeiro) then (sim)
+    :estadoDesejadoReleA = verdadeiro;
+  else (não)
+    :estadoDesejadoReleA = falso;
+  endif
+
+  if (comando do Rele B é "1" OU releB é verdadeiro) then (sim)
+    :estadoDesejadoReleB = verdadeiro;
+  else (não)
+    :estadoDesejadoReleB = falso;
+  endif
+
+  'Atualiza estados dos atuadores:
+  :Chama atualizarEstado(ledpin, "Led ESP32", estadoDesejadoLed, estadoLedAtual);
+  :Chama atualizarEstado(RELE_PINO_A, "Rele A", estadoDesejadoReleA, estadoReleA);
+  :Chama atualizarEstado(RELE_PINO_B, "Rele B", estadoDesejadoReleB, estadoReleB);
+
+  'Atualiza variáveis com as médias atuais:
+  :temperatura = mediaTemp;
+  :umidadeAr = mediaUmid;
+  :luminosidade = mediaLuz;
+  :umidadeSolo3 = mediasPercentual[3];
+  :umidadeSolo10 = mediasPercentual[10];
+  :umidadeSolo14 = mediasPercentual[14];
+
+  'Envia dados para a nuvem:
+  :Chama onLedTesteChange();
+  :Chama onReleAChange();
+  :Chama onReleBChange();
+  :Chama onTemperaturaNuvemChange();
+  :Chama onUmidadeNuvemChange();
+  :Chama onLuminosidadeNuvemChange();
+  :Chama onUmidadeSoloNuvem3Change();
+  :Chama onUmidadeSoloNuvem10Change();
+  :Chama onUmidadeSoloNuvem14Change();
+}
+
+partition atualizarEstado {
+  if (estadoDesejado é verdadeiro) then (sim)
+    :Define o pino como HIGH (ativo);
+    :Atualiza a variável estadoAtual para 1.0;
+    :Imprime no Serial que o atuador está "Ligado";
+  else (não)
+    :Define o pino como LOW (desligado);
+    :Atualiza a variável estadoAtual para 0.0;
+    :Imprime no Serial que o atuador está "Desligado";
+  endif
+}
+
+partition registrarDadosPlanilha {
+  :Cria vetor dadosParaEnviar[9];
+  :dadosParaEnviar[0] = estadoLedAtual;
+  :dadosParaEnviar[1] = estadoReleA;
+  :dadosParaEnviar[2] = estadoReleB;
+  :dadosParaEnviar[3] = temperatura;
+  :dadosParaEnviar[4] = umidadeAr;
+  :dadosParaEnviar[5] = luminosidade;
+  :dadosParaEnviar[6] = umidadeSolo3;
+  :dadosParaEnviar[7] = umidadeSolo10;
+  :dadosParaEnviar[8] = umidadeSolo14;
+
+  :Chama escreverEmLista("dados", 9, dadosParaEnviar);
+}
+
+@enduml

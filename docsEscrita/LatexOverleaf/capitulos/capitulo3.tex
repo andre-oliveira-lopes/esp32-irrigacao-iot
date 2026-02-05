@@ -1,0 +1,886 @@
+% CAPÍTULO 3 – DESENVOLVIMENTO
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3. SOLUÇÃO}}
+\addcontentsline{toc}{section}{3. SOLUÇÃO}
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.1. O sistema proposto}}
+\addcontentsline{toc}{section}{3.1. O sistema proposto} 
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.1.1. Justificativas para o novo sistema}}
+\addcontentsline{toc}{section}{3.1.1. Justificativas para o novo sistema} 
+\vspace{-0.7\baselineskip}
+
+O sistema atual do agricultor apresenta diversos problemas, como a irrigação manual imprecisa, o alto consumo de água, a dependência constante de supervisão humana e o desperdício energético. Além disso, a ausência de automação dificulta o acompanhamento de variáveis importantes para o cultivo, como umidade do solo, temperatura e luminosidade.
+
+A nova proposta resolve esses problemas ao automatizar todo o processo. A ESP32, combinada com sensores e válvulas controladas automaticamente, proporciona irrigação sob demanda, baseada em dados em tempo real. O uso de multiplexadores amplia significativamente a quantidade de sensores que o sistema pode gerenciar sem a necessidade de múltiplas placas controladoras, reduzindo custos.
+
+A integração com painéis solares e o uso do modo de sono profundo contribuem para a sustentabilidade e eficiência energética da solução. Além disso, a comunicação com a plataforma Arduino Cloud permite o monitoramento remoto, melhorando a tomada de decisão e a segurança operacional.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.1.2. Situação desejada: objetivos gerais e específicos}}
+\addcontentsline{toc}{section}{3.1.2. Situação desejada: objetivos gerais e específicos} 
+\vspace{-0.7\baselineskip}
+
+\selectfont\textbf{Objetivo geral:}
+
+Desenvolver um sistema automatizado de irrigação que otimize o uso da água e da energia elétrica em pequenos e médios cultivos, com base em dados de sensores e controle remoto.
+
+\selectfont\textbf{Objetivo específicos:}
+
+\begin{adjustwidth}{1.2cm}{0cm}
+\begin{itemize}
+  \setlength\itemsep{8pt}
+  \setlength\parskip{0pt}
+  \setlength\parsep{0pt}
+
+  \item Monitorar continuamente a umidade do solo em diferentes pontos usando sensores.
+
+  \item Controlar automaticamente válvulas de irrigação conforme os níveis de umidade detectados.
+
+  \item Ampliar a capacidade de monitoramento utilizando multiplexadores com uma única ESP32.
+
+  \item Reduzir o consumo energético utilizando energia solar e o modo de economia da ESP32.
+
+  \item Permitir o monitoramento remoto dos dados e do funcionamento do sistema pela internet.
+
+  \item Utilizar sensores de baixo custo, compensando suas limitações com lógica de controle e redundância.
+\end{itemize}
+\end{adjustwidth}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.1.3. Soluções alternativas}}
+\addcontentsline{toc}{section}{3.1.3. Soluções alternativas} 
+\vspace{-0.7\baselineskip}
+
+Algumas alternativas consideradas para resolver os problemas identificados foram:
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{\Roman{enumi}.}} % Números romanos em negrito
+  \setlength\itemsep{8pt}                             % Espaço entre itens
+
+  \item \textbf{Uso de sistemas comerciais prontos de irrigação inteligente:} 
+  
+  Apesar de funcionais, esses sistemas costumam ter custo elevado, pouca flexibilidade e dependência de serviços proprietários.
+
+  \item \textbf{Uso de Arduino Uno ou Mega com múltiplos sensores:}
+  
+  Embora viável, esses modelos não possuem conectividade Wi-Fi nativa, o que demandaria módulos adicionais e aumentaria a complexidade do sistema.
+
+  \item \textbf{Uso de ESP32 com sensores conectados diretamente (sem multiplexador):}
+  
+  Essa opção limitaria drasticamente o número de sensores por conta das portas disponíveis na placa. O custo aumentaria com a adição de mais placas.
+\end{enumerate}
+
+Por fim, a solução baseada em ESP32 + multiplexadores se destacou por ser escalável, acessível, conectável à internet e eficiente no uso de recursos. Ela permite expandir o número de sensores mantendo baixo custo e complexidade reduzida, o que a torna ideal para aplicações domésticas, escolares e de agricultura urbana, que é o caso. 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2. Solução escolhida}}
+\addcontentsline{toc}{section}{3.2. Solução escolhida} 
+\vspace{-0.7\baselineskip}
+
+Dentre as alternativas avaliadas, a solução escolhida utiliza uma placa ESP32 DevKit V1 combinada com multiplexadores CD74HC4067, sensores de umidade de baixo custo e um sistema de controle de válvulas automatizado. A decisão levou em conta os seguintes fatores:
+
+\selectfont\textbf{Vantagens:}
+
+\listarecuada{
+    \item Baixo custo de implementação.
+    \item Conectividade Wi-Fi integrada.
+    \item Capacidade de expansão via multiplexadores (16 sensores por multiplexador).
+    \item Consumo reduzido de energia, com suporte a modo de sono profundo.
+    \item Flexibilidade para integração com fontes solares e nós IoT.
+}
+
+\selectfont\textbf{Desvantagens:}
+
+\listarecuada{
+    \item Sensores de umidade de baixo custo têm menor precisão.
+    \item Requer um pouco mais de conhecimento técnico para configuração e programação.
+    \item Limitação física na expansão (número de GPIOs da ESP32).
+}
+
+A alternativa com sistemas prontos comerciais foi descartada por custo elevado e pouca flexibilidade. O uso de outras placas (como Arduino Uno/Mega) foi considerado inferior por falta de Wi-Fi nativo e maior consumo de energia.
+
+%\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.1. Escopo da solução}}
+\addcontentsline{toc}{section}{3.2.1. Escopo da solução} 
+\vspace{-0.7\baselineskip}
+
+\selectfont\textbf{Dentro do escopo:}
+
+\listarecuada{
+    \item Monitoramento de umidade do solo.
+    \item Controle automático de válvulas de irrigação.
+    \item Armazenamento e envio dos dados para a nuvem (Arduino Cloud).
+    \item Modo de economia de energia (sono profundo).
+    \item Alimentação por energia solar (via bateria e painel solar).
+}
+
+\selectfont\textbf{Fora do escopo:}
+
+\listarecuada{
+    \item Medidas precisas de condutividade elétrica do solo.
+    \item Interface de aplicativo móvel personalizada.
+    \item Suporte a fertilização automatizada.
+    \item Integração com sistemas de previsão climática.
+}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.2.Lista de Requisitos do Sistema}}
+\addcontentsline{toc}{section}{3.2.2. Lista de Requisitos do Sistema} 
+\vspace{-0.7\baselineskip}
+
+Após análise, uma lista de requisitos funcionais e não funcionais bem completa e alinhada no sistema do código, deu origem aos seguintes requisitos:
+
+\selectfont\textbf{Requisitos Funcionais:}
+
+\listarecuada{
+    \item O sistema deve monitorar a temperatura e a umidade relativa do ar usando um sensor DHT (ex.: DHT11/DHT22).
+    \item O sistema deve monitorar a luminosidade ambiente usando um sensor LDR.
+    \item O sistema deve monitorar a umidade do solo em múltiplos pontos (via multiplexador).
+    \item O sistema deve acionar relés para irrigar a plantação quando a umidade do solo estiver abaixo de um valor limite.
+    \item O sistema deve enviar dados de sensores periodicamente para a nuvem (Arduino IoT Cloud) via Wi-Fi.
+    \item O sistema deve armazenar leituras médias de sensores e enviar à nuvem a cada 60 segundos.
+    \item O sistema deve permitir depuração via BluetoothSerial, exibindo mensagens de status em tempo real.
+    \item O sistema deve tentar reconectar automaticamente ao Wi-Fi em caso de perda de conexão.
+    \item O sistema deve desligar a bomba de irrigação automaticamente após um tempo máximo de irrigação (para segurança).
+    \item O sistema deve entrar em modo de economia de energia (deep sleep) após a irrigação do final do dia.
+}
+
+\selectfont\textbf{Requisitos Não Funcionais:}
+
+\listarecuada{
+    \item O sistema deve ser não bloqueante, utilizando \texttt{millis()} em vez de \texttt{delay()} para permitir multitarefa.
+    \item O sistema deve ser compatível com a plataforma Arduino Cloud, integrando-se à infraestrutura da IoT.
+    \item O sistema deve ser resiliente a falhas de rede, tentando reconectar automaticamente ao Wi-Fi.
+    \item O sistema deve apresentar baixo consumo de energia, aproveitando recursos como \textit{deep sleep}.
+    \item O sistema deve ser seguro, evitando sobrecarga elétrica nos relés e bombas (uso de limites máximos de tempo e proteção de hardware).
+    \item O sistema deve ser fácil de configurar e permitir modificações nos parâmetros via interface web (Arduino IoT Cloud).
+    \item O código deve ser modular, facilitando a manutenção futura e a expansão do projeto.
+    \item O sistema deve ser compatível com a IDE Arduino e compilável na placa ESP32 DevKit v1.
+    \item O sistema deve ser portátil e replicável, permitindo que outros produtores adaptem para seus pomares e plantações.
+    \item O sistema deve ter uma interface de comunicação legível para depuração via BluetoothSerial.
+}
+
+%\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.3. Diagrama de Casos de Uso}}
+\addcontentsline{toc}{section}{3.2.3. Diagrama de Casos de Uso} 
+\vspace{-0.7\baselineskip}
+
+O diagrama visa ilustrar como o Produtor Agrícola, o Arduino IoT Cloud e o Sistema de Irrigação (ESP32) interagem entre si para permitir o monitoramento das condições do pomar, o envio de dados para a nuvem e o acionamento remoto ou automático da irrigação.
+
+O Produtor Agrícola é o usuário final, responsável por supervisionar o sistema e realizar ajustes. O Arduino IoT Cloud representa a plataforma que conecta o usuário ao sistema, possibilitando a visualização de dados e o envio de comandos. Já o Sistema de Irrigação (ESP32) representa o hardware embarcado que executa as ações automatizadas, como leitura de sensores e acionamento dos relés.
+
+Abaixo, apresenta-se o diagrama que ilustra essas relações: 
+
+\minhaimagemcomfonte{11cm}{capitulos/img/3_2_3_diagrama_casos_de_uso}{Diagrama de Casos de Uso do Projeto}
+
+%\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.4. Especificações textuais dos casos de uso}}
+\addcontentsline{toc}{section}{3.2.4. Especificações textuais dos casos de uso} 
+\vspace{-0.7\baselineskip}
+
+Para complementar o diagrama de casos de uso apresentado anteriormente, segue abaixo a descrição textual detalhando cada ator e suas respectivas funcionalidades no sistema proposto.
+
+\selectfont\textbf{Para o Produtor Agrícola:}
+
+\listarecuada{
+    \item Visualizar Dados de Sensores: Visualizar temperatura e umidade do ar, luminosidade e umidade do solo na nuvem (via Arduino IoT Cloud).
+    \item Configurar Parâmetros do Sistema: Ajustar limites de umidade, tempos de irrigação e outras configurações remotamente.
+    \item Ativar/Desativar Irrigação Manualmente: Forçar o acionamento dos relés via interface da nuvem, em caso de necessidade.
+}
+
+\selectfont\textbf{Para o Arduino IoT Cloud:}
+
+\listarecuada{
+    \item Receber Dados de Sensores: Receber os valores lidos de temperatura, umidade, luminosidade e umidade do solo.
+    \item Enviar Comandos ao Sistema de Irrigação: Enviar comandos para acionar ou desativar os relés, ajustar parâmetros e receber status.
+}
+
+\selectfont\textbf{Para o Sistema de Irrigação (ESP32):}
+
+\listarecuada{
+    \item Monitorar Sensores: Ler valores de temperatura e umidade do ar, luminosidade e umidade do solo.
+
+    \item Acionar Relés de Irrigação: Acionar ou desligar relés automaticamente com base nos limites de umidade definidos.
+
+    \item Enviar Dados para a Nuvem: Enviar leituras periódicas para o Arduino IoT Cloud.
+
+    \item Gerenciar Conexão Wi-Fi: Monitorar a conexão Wi-Fi e tentar reconectar automaticamente em caso de falha.
+
+    \item Entrar em Modo de Economia de Energia: Colocar o sistema em \textit{deep sleep} para poupar energia quando não estiver irrigando e na ausência de sol.
+}
+
+%\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.5. Modelo Conceitual de Classes}}
+\addcontentsline{toc}{section}{3.2.5. Modelo Conceitual de Classes} 
+\vspace{-0.7\baselineskip}
+
+O modelo conceitual proposto reflete a organização modular do sistema de irrigação, evidenciando a separação de responsabilidades entre sensores, atuadores, lógica de controle e interface com a nuvem. Essa modelagem contribui para a manutenibilidade e a escalabilidade da solução. A seguir, é apresentada uma visão desse plano:
+
+\minhaimagemcomfonte{16cm}{capitulos/img/3_2_5_Modelo_Conceitual_de_Classes}{Modelo Conceitual de Classes}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.2.6. Modelo Conceitual de Dados}}
+\addcontentsline{toc}{section}{3.2.6. Modelo Conceitual de Dados} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{9cm}{capitulos/img/3_2_6_Modelo_Conceitual_de_Dados}{Modelo Conceitual de Dados}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3. Solução Tecnológica}}
+\addcontentsline{toc}{section}{3.3.	Solução Tecnológica} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.1. Diagrama de Sequência (ou comunicação)}}
+\addcontentsline{toc}{section}{3.3.1. Diagrama de Sequência (ou comunicação)} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{13cm}{capitulos/img/3_3_1_Diagrama_de_Sequência}{Diagrama de Sequência}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.2. Projeto de Interfaces}}
+\addcontentsline{toc}{section}{3.3.2. Projeto de Interfaces} 
+\vspace{-0.7\baselineskip}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Mobile}}
+\includegraphics[width=13cm]{capitulos/img/Dasboard_mobile_Part_1}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Aplicativo da Arduino Cloud (Parte 1).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Mobile}}
+\includegraphics[width=14cm]{capitulos/img/Dasboard_mobile_Part_2}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Aplicativo da Arduino Cloud (Parte 2).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Mobile}}
+\includegraphics[width=14cm]{capitulos/img/Dasboard_mobile_Part_3}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Aplicativo da Arduino Cloud (Parte 3).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Mobile}}
+\includegraphics[width=10cm]{capitulos/img/Dasboard_mobile_Part_4}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Aplicativo da Arduino Cloud (Parte 4).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Web}}
+\includegraphics[width=16cm]{capitulos/img/Dasboard_mobile_Part_5}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Dashboard da Arduino Cloud (Parte 5).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\begin{figure}[H]
+\begin{center}
+\caption{\textbf{Dashboard de Visão Web}}
+\includegraphics[width=16cm]{capitulos/img/Dasboard_mobile_Part_6}
+
+%\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Tela do Dashboard da Arduino Cloud (Parte 6).}\par}
+\end{center}
+\end{figure}
+% -----------------------------
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.3. Diagrama de Estados}}
+\addcontentsline{toc}{section}{3.3.3. Diagrama de Estados} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{9cm}{capitulos/img/3_3_3_Diagrama_de_Estados}{Diagrama de Estados}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.4. Diagrama de Atividades}}
+\addcontentsline{toc}{section}{3.3.4. Diagrama de Atividades} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{7cm}{capitulos/img/3_3_4_Diagrama_de_Atividades_part_1}{Diagrama de Atividade (Parte 1)}
+
+\minhaimagemcomfonte{5cm}{capitulos/img/3_3_4_Diagrama_de_Atividades_part_2}{Diagrama de Atividade (Parte 2)}
+
+\minhaimagemcomfonte{6cm}{capitulos/img/3_3_4_Diagrama_de_Atividades_part_3}{Diagrama de Atividade (Parte 3)}
+
+\minhaimagemcomfonte{5.5cm}{capitulos/img/3_3_4_Diagrama_de_Atividades_part_4}{Diagrama de Atividade (Parte 4)}
+
+\minhaimagemcomfonte{8cm}{capitulos/img/3_3_4_Diagrama_de_Atividades_part_5}{Diagrama de Atividade (Parte 5)}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.5. Diagrama de Componentes}}
+\addcontentsline{toc}{section}{3.3.5. Diagrama de Componentes} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{16cm}{capitulos/img/3_3_5_Diagrama_de_Componentes}{Diagrama de Componentes}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.6. Modelo de classes de Projeto}}
+\addcontentsline{toc}{section}{3.3.6. Modelo de classes de Projeto} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{12cm}{capitulos/img/3_3_6_Modelo_de_classes_de_Projeto}{Modelo de classes de Projeto} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.7. Modelo Físico de dados}}
+\addcontentsline{toc}{section}{3.3.7. Modelo Físico de dados} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.7.1. Projeto de Tabelas e Arquivos}}
+\addcontentsline{toc}{section}{3.3.7.1. Projeto de Tabelas e Arquivos} 
+\vspace{-0.7\baselineskip}
+
+O sistema desenvolvido utiliza o Google Planilhas como meio de armazenamento dos dados sensoriais, funcionando como uma base de dados em nuvem. A planilha é alimentada automaticamente por meio de um script desenvolvido com Google Apps Script, o qual se comunica com a placa microcontroladora (ESP32) via requisições HTTP para registrar as leituras em tempo real.
+
+A estrutura de dados adotada na planilha “planilhaDadosIOT” segue a modelagem de uma única tabela principal denominada "dados", que contém as seguintes colunas:
+
+\begin{table}[H]
+\centering
+\captionsetup{justification=centering}
+\caption{\textbf{Estrutura dos dados armazenados na planilha ou banco de dados IoT}}
+\vspace{-0.5em}
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}m{3.5cm}
+                                >{\centering\arraybackslash}m{2.3cm}
+                                >{\centering\arraybackslash}m{3cm}
+                                >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Nome do Campo} & \textbf{Tipo de Dado} & \textbf{Formato} & \textbf{Descrição} \\
+\midrule
+data\_completa        & DATETIME & 2025-06-07 14:35:00 & Data e hora completa da leitura enviada pelo dispositivo. \\
+data                  & DATE     & 2025-06-07           & Data extraída da leitura (sem o horário). \\
+hora                  & TIME     & 14:35:00             & Horário extraído da leitura (sem a data). \\
+estado\_led           & BOOLEAN  & 0 ou 1               & Estado do LED no momento da leitura. \\
+estado\_rele\_A       & BOOLEAN  & 0 ou 1               & Estado do relé A. \\
+estado\_rele\_B       & BOOLEAN  & 0 ou 1               & Estado do relé B. \\
+temperatura           & FLOAT    & 27{,}3               & Temperatura ambiente em graus Celsius. \\
+umidade\_ar           & INTEGER  & 65                   & Umidade relativa do ar (\%). \\
+luminosidade          & INTEGER  & 73                   & Luminosidade ambiente (\%). \\
+umidade\_solo\_3      & INTEGER  & 35                   & Umidade do solo no sensor da porta 3. \\
+umidade\_solo\_10     & INTEGER  & 40                   & Umidade do solo no sensor da porta 10. \\
+umidade\_solo\_14     & INTEGER  & 38                   & Umidade do solo no sensor da porta 14. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{table}
+
+\begin{itemize}
+  \setlength\itemsep{8pt}
+  \setlength\parskip{0pt}
+  \setlength\parsep{0pt}
+
+  \item A planilha é utilizada como um banco de dados não relacional estruturado, com linhas representando registros e colunas representando os campos do sistema
+
+  \item A atualização dos dados é feita de forma automática e contínua, utilizando funções do Google Apps Script, que executa o tratamento dos dados recebidos e os insere na planilha.
+
+  \item Para evitar inconsistências, o sistema realiza a separação de data e hora, além de manter um campo com a data completa (data\_completa), útil para ordenações e filtros.
+\end{itemize}
+
+A estrutura de armazenamento dos dados deste projeto foi projetada com foco em simplicidade, acessibilidade, leitura rápida e integração em tempo quase real com ferramentas de análise. Esta solução foi escolhida por sua praticidade, baixo custo (gratuita para contas Google) e facilidade de integração com outras ferramentas da Google.
+
+Em termos de forma de armazenamento, os dados são mantidos em um formato desnormalizado, o que significa que todos os valores capturados em cada leitura são armazenados em uma única linha. Isso otimiza o desempenho de leitura, pois reduz a complexidade das consultas, tornando o acesso mais rápido — fator essencial para sistemas que priorizam a visualização e análise em tempo real.
+
+A escalabilidade do Google Sheets também foi levada em consideração. Cada planilha pode conter até 10 milhões de células, o que, considerando uma média de 26 colunas como exemplo, permite aproximadamente 384 mil linhas de dados. Essa capacidade é suficiente para longos períodos de captação contínua sem a necessidade de segmentar ou arquivar planilhas manualmente.
+
+Em termos de performance, os testes mostraram que o sistema leva em torno de 5 segundos para registrar 3 células, o que é considerado um tempo adequado para aplicações de sensoriamento ambiental que operam com frequência cíclica de leitura de 60 segundos.
+
+Os dados armazenados na planilha são exportados e integrados ao Power BI \textbf{(conforme imagem em anexo I)}, que fica publicado na nuvem e gera modelos semânticos otimizados para análise. Além disso, sua hospedagem na nuvem assegura acesso remoto, segurança e compartilhamento facilitado, o que amplia a aplicabilidade dos dados captados, inclusive para decisões agronômicas, pedagógicas ou científicas.
+
+O projeto também admite a exportação dos dados em diversos formatos, como CSV, XLSX, TSV, HTML, ODS, PDF, além do formato nativo do Google Sheets, o que facilita a portabilidade entre diferentes sistemas e plataformas.
+
+Por fim, destaca-se que, embora o Google Sheets tenha sido a plataforma escolhida por sua simplicidade e custo zero, seria possível realizar o mesmo processo de registro utilizando outras soluções como o Google Firebase, que oferece uma base de dados NoSQL em tempo real, mais adequada para aplicações com alta frequência de leitura e escrita. Continuando a abordagem de alternativas, é possível fazer a gravação dos dados em memórias como EEPROM, cartão SD, e outros, porém essa ideia não foi explorada.
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.7.2. Scripts de geração do banco e suas tabelas}}
+\addcontentsline{toc}{section}{3.3.7.2. Scripts de geração do banco e suas tabelas} 
+\vspace{-0.7\baselineskip}
+
+A linguagem de programação usada nesse código é Google Apps Script, uma linguagem de script baseada em JavaScript que roda no ambiente da nuvem da Google. Ela é usada principalmente para automatizar e integrar serviços do Google, como o Google Sheets, Gmail, Google Drive, entre outros.
+
+\captionsetup{justification=centering}
+\begin{longtable}{|p{10.8cm}|p{4.1cm}|}
+\caption{Trechos de Código em Google Apps Script com Suas Respectivas Ações no Sistema de Irrigação} \\
+\hline
+\multicolumn{1}{|c|}{\textbf{Comando em Google Apps Script}} & 
+\multicolumn{1}{c|}{\textbf{Ação causada}} \\
+\hline
+%----------------------------------------------------------------------------
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+function doPost(e) {
+  // Abre a planilha atual
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  // Converte os dados recebidos (em texto JSON) 
+  // para um objeto JavaScript
+  var params = JSON.parse(e.postData.contents);
+  // Identifica qual ação o ESP32 quer realizar
+  var action = params.action;
+  // Verifica qual ação foi pedida e chama 
+  // a função correspondente
+  if (action === "escreverEmLista") {
+    return escreverEmLista(sheet, params);
+  } else if (action === "escreverEmCelula") {
+    return escreverEmCelula(sheet, params);
+  } else if (action === "lerCelula") {
+    return lerCelula(sheet, params);
+  } else if (action === "lerLinha") {
+    return lerLinha(sheet, params);
+  } else {
+    return ContentService.createTextOutput("Ação não reconhecida");
+  }
+}
+\end{lstlisting}
+\end{minipage}
+&
+Esta função é executada automaticamente quando o ESP32 envia dados via HTTP POST. \\
+\hline
+%----------------------------------------------------------------------------
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+function escreverEmLista(sheet, params) {
+  // Nome da aba (ex: "dados")
+  var identificacao = params.identificacao;
+  // Lista com os valores enviados (ex: [23.5, 70])
+  var dados = params.dados;
+  // Procura pela aba com o nome desejado ou  
+  // cria uma nova se não existir.
+  var aba = sheet.getSheetByName(identificacao)
+           || sheet.insertSheet(identificacao);
+  // A próxima linha vazia
+  var ultimaLinha = aba.getLastRow() + 1;
+  // Data e hora atuais
+  var dataHora = new Date();
+  aba.getRange(ultimaLinha, 1).setValue(dataHora);
+  aba.getRange(ultimaLinha, 2).setValue(dataHora.toLocaleDateString());
+  aba.getRange(ultimaLinha, 3).setValue(dataHora.toLocaleTimeString());
+
+  for (var i = 0; i < dados.length; i++) {
+    aba.getRange(ultimaLinha, i + 4).setValue(dados[i]);
+  }
+
+  return ContentService.createTextOutput("Dados salvos com sucesso");
+}
+\end{lstlisting}
+\end{minipage}
+&
+Escreve os dados em uma nova linha na aba da planilha informada. \\
+\hline
+%----------------------------------------------------------------------------
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+function escreverEmCelula(sheet, params) {
+  var identificacao = params.identificacao;
+  var celula = params.celula;
+  var dado = params.dado;
+
+  var aba = sheet.getSheetByName(identificacao)
+           || sheet.insertSheet(identificacao);
+
+  aba.getRange(celula).setValue(dado);
+  // Escreve o dado na célula desejada
+  return 
+  ContentService.createTextOutput("Dado salvo na célula " + celula);
+}
+\end{lstlisting}
+\end{minipage}
+&
+Escreve um único valor em uma célula específica da aba. \\
+\hline
+%----------------------------------------------------------------------------
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+function lerCelula(sheet, params) {
+  var identificacao = params.identificacao;
+  // Nome da aba
+
+  var celula = params.celula;
+  // Exemplo: "C2"
+
+  var aba = sheet.getSheetByName(identificacao);
+  if (!aba) {
+    return ContentService.createTextOutput("Aba não encontrada");
+  }
+
+  var valor = aba.getRange(celula).getValue();
+  // Lê o valor da célula
+  return ContentService.createTextOutput(valor);
+  // Retorna o valor para o ESP32
+}
+\end{lstlisting}
+\end{minipage}
+&
+Lê e retorna o valor de uma célula específica da aba. \\
+\hline
+%--------------------------Parte 1----------------------------------------------
+\hline
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+function lerLinha(sheet, params) {
+  try {
+    Logger.log("Iniciando função lerLinha");
+
+    var identificacao = params.identificacao;
+    var linha = params.linha;
+
+    Logger.log("Identificação: " + identificacao);
+    Logger.log("Linha: " + linha);
+
+    var aba = sheet.getSheetByName(identificacao);
+    if (!aba) {
+      Logger.log("Aba não encontrada: " + identificacao);
+      return ContentService.createTextOutput("Aba não encontrada");
+    }
+
+    Logger.log("Aba encontrada: " + identificacao);
+    var ultimaLinha = aba.getLastRow();
+
+    if (linha > ultimaLinha || linha < 1) {
+\end{lstlisting}
+\end{minipage}
+&
+Lê todos os valores de uma linha da aba, formatando a data e hora. \\
+\hline
+%------------------------Parte 2-----------------------------------------------
+\hline
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meucodigo]
+
+      Logger.log("Linha inválida: " + linha + " (máximo permitido: " +
+      ultimaLinha + ")");
+      return ContentService.createTextOutput("Linha inválida: " +
+      linha);
+    }
+
+    var valores 
+    = aba.getRange(linha, 1, 1, aba.getLastColumn()).getValues()[0];
+
+    var dataFormatada 
+    = Utilities.formatDate(new Date(valores[0]), "GMT-3", "dd/MM/yyyy");
+    var horaFormatada 
+    = Utilities.formatDate(new Date(valores[1]), "GMT-3", "HH:mm:ss");
+
+    valores[0] = dataFormatada;
+    valores[1] = horaFormatada;
+
+    Logger.log("Valores lidos da linha " + linha + ": " +
+    valores.join(";"));
+
+    return ContentService.createTextOutput(valores.join(";"));
+  } catch (e) {
+    Logger.log("Erro na função lerLinha: " + e.toString());
+    return ContentService.createTextOutput("Erro: " + e.toString());
+  }
+}
+\end{lstlisting}
+\end{minipage}
+&
+(Continuação do código acima) \\
+\hline
+
+\end{longtable}
+\begin{center}
+\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor com base no código em Google Apps Script.}\par}
+\end{center}
+
+O trecho de código abaixo está escrito em M (Power Query Formula Language), a linguagem usada pelo Power BI e pelo Excel para importar, transformar e preparar dados de várias fontes, como planilhas do Google Sheets. 
+
+% ========================= Power Bi =======================
+
+\captionsetup{justification=centering}
+\begin{longtable}{|p{10.7cm}|p{4.2cm}|}
+\caption{Trechos de Código em Linguagem M Com Suas Ações no Power BI} \\
+\hline
+\multicolumn{1}{|c|}{\textbf{Comando em Linguagem M}} & 
+\multicolumn{1}{c|}{\textbf{Ação causada}} \\
+\hline
+%-------------------------------------------------
+\hline
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meuEstiloM]
+// Define o início do código M com a palavra-chave 'let'
+let
+    // Passo 1: Carrega o conteúdo da planilha do Google Sheets 
+    // a partir do link fornecido.
+    Fonte = GoogleSheets.Contents(LinkPlanilhaEsp32),
+
+    // Passo 2: Seleciona a aba (Sheet) chamada "dados" dentro 
+    // da planilha.
+    dados_Table = Fonte{[name="dados", ItemKind="Table"]}[Data],
+
+    // Passo 3: Promove a primeira linha da tabela como cabeçalhos.
+    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(dados_Table,
+    [PromoteAllScalars=true]),
+
+\end{lstlisting}
+\end{minipage}
+&
+Esse código se conecta a uma planilha do Google Sheets usando o parâmetro LinkPlanilhaEsp32. \\
+\hline
+%-------------------------------------------------
+%-------------------------------------------------
+\hline
+\begin{minipage}[t]{\linewidth}
+\begin{lstlisting}[style=meuEstiloM]
+    // Passo 4: Altera o tipo de dados de cada coluna da tabela 
+    // para garantir a consistência.
+    
+    // Aqui, por exemplo, definimos que a coluna "Data" é do tipo date,
+    // "Hora" é do tipo time, e as demais colunas são convertidas 
+    // para inteiros (Int64.Type).
+    
+    #"Tipo Alterado" = Table.TransformColumnTypes(
+        #"Cabeçalhos Promovidos",
+        {
+            // Coluna com data completa
+            {"Data completa", type date},  
+            
+            // Coluna somente com a data
+            {"Data", type date},          
+            
+            // Coluna somente com a hora
+            {"Hora", type time},          
+            
+            // Estado do LED como inteiro
+            {"Estado do LED", Int64.Type},
+            
+            // Estado do relé A como inteiro
+            {"Estado Rele A", Int64.Type},      
+            // Estado do relé B como inteiro
+            {"Estado Rele B", Int64.Type}, 
+            
+            // Temperatura como inteiro
+            {"Temperatura (°C)", Int64.Type},   
+            // Umidade como inteiro
+            {"Umidade (%)", Int64.Type},
+            
+            // Luminosidade como inteiro
+            {"Luminosidade (%)", Int64.Type},  
+            
+            // Umidade do solo sensor 3
+            {"Umidade Solo 3", Int64.Type},     
+            // Umidade do solo sensor 10
+            {"Umidade Solo 10", Int64.Type},    
+            // Umidade do solo sensor 14
+            {"Umidade Solo 14", Int64.Type}     
+        }
+    )
+
+// Define o final do código com a palavra-chave 'in' para retornar 
+// o resultado final da transformação
+in
+    #"Tipo Alterado"
+\end{lstlisting}
+\end{minipage}
+&
+seleciona a aba "dados", promove a primeira linha como cabeçalhos e converte as colunas para tipos específicos (data, hora, inteiros). \\
+\hline
+%-------------------------------------------------
+\end{longtable}
+\begin{center}
+\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor com base no código.}\par}
+\end{center}
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.8. Ambiente tecnológico do sistema}}
+\addcontentsline{toc}{section}{3.3.8. Ambiente tecnológico do sistema} 
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.8.1. Ambiente Físico (diagrama de implantação)}}
+\addcontentsline{toc}{section}{3.3.8.1. Ambiente Físico (diagrama de implantação)} 
+\vspace{-0.7\baselineskip}
+
+\minhaimagemcomfonte{16cm}{capitulos/img/3_3_8_1_diagrama_de_implantação}{Diagrama de Implantação}
+
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.8.2. Justificativa da escolha da linguagem de programação)}}
+\addcontentsline{toc}{section}{3.3.8.2. Justificativa da escolha da linguagem de programação} 
+\vspace{-0.7\baselineskip}
+
+O projeto em questão, que envolve sensores de solo, atuadores (como válvulas solenoides), comunicação com a nuvem e um microcontrolador ESP32, foi analisado três linguagens compatíveis e viáveis:
+
+\vspace*{0.7em}  % Ajuste
+\selectfont\textbf{1. C/C++ (Arduino)}
+
+Apesar de antiga, mas com o baixo custo e curva de aprendizado moderada, excelente desempenho e compatibilidade total com hardware e sua alta eficiência no controle embarcado e integração com nuvem, foi a linguagem vencedora para fazer o projeto. Alguns motivos são:
+
+\begin{longtable}{|>{\centering\arraybackslash}p{7cm}|>{\centering\arraybackslash}p{7cm}|}
+\caption{Critérios Técnicos e Não Técnicos Considerados na Escolha da Linguagem C++ para o Projeto} \\
+\hline
+\textbf{Critérios Técnicos} & \textbf{Critérios Não Técnicos} \\
+\hline
+\endfirsthead
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
+
+Simples de escrever no contexto embarcado com uso do framework Arduino. &
+Linguagem nativamente suportada pelo Arduino IoT Cloud. \\
+\hline
+Boa legibilidade (especialmente com bibliotecas como DHT, WiFi, ThingSpeak, etc.). &
+Muito popular na comunidade maker e IoT. \\
+\hline
+Altamente portátil entre placas como Arduino Uno, Mega, ESP8266, ESP32. &
+Alto volume de soluções prontas (exemplos, fóruns, bibliotecas). \\
+\hline
+Suporte completo à orientação a objetos. &
+Baixo custo: IDE gratuita (Arduino IDE ou PlatformIO), com muitos tutoriais e suporte. \\
+\hline
+Possui recursos e bibliotecas voltadas à automação e IoT. & ~ \\
+\hline
+Suporta operação de baixo nível (como PWM, interrupções, etc.) fundamental para controle de sensores e atuadores. & ~ \\
+\end{longtable}
+
+\begin{center}
+\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{center}
+
+\selectfont\textbf{2. MicroPython}
+
+Apesar de ser usada principalmente na programação de microcontroladores, dispositivos IoT (Internet das Coisas) e hardware embarcado em geral, apresentou pontos que deixou a desejar:
+
+\begin{longtable}{|>{\centering\arraybackslash}p{7cm}|>{\centering\arraybackslash}p{7cm}|}
+\caption{Critérios Técnicos e Não Técnicos Considerados na Avaliação da Linguagem Python para o Projeto} \\
+\hline
+\textbf{Critérios Técnicos} & \textbf{Critérios Não Técnicos} \\
+\hline
+\endfirsthead
+\endhead
+\endfoot
+\endlastfoot
+
+Simples e fácil de aprender, especialmente para iniciantes. &
+Muito popular na área de ensino e prototipagem rápida. \\
+\hline
+
+Ótima legibilidade (sintaxe limpa). &
+Alta produtividade (velocidade de desenvolvimento). \\
+\hline
+
+Multiplataforma. &
+\textcolor{red}{Ainda pouco utilizado na Arduino IoT Cloud (não há suporte nativo direto).} \\
+\hline
+
+\textcolor{red}{Menor desempenho que C/C++ para aplicações em tempo real.} &
+~ \\
+\hline
+
+\textcolor{red}{Menor disponibilidade de bibliotecas para sensores específicos comparado ao Arduino.} &
+~ \\
+\hline
+\end{longtable}
+
+\begin{center}
+\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{center}
+
+\selectfont\textbf{3. JavaScript}
+
+Embora bastante versável para solucionar uma ampla gama de problemas do mundo real, também apresentou pontos que deixou a desejar:
+
+\begin{longtable}{|>{\centering\arraybackslash}p{7cm}|>{\centering\arraybackslash}p{7cm}|}
+\caption{Critérios Técnicos e Não Técnicos Considerados na Avaliação da Linguagem JavaScript para o Projeto} \\
+\hline
+\textbf{Critérios Técnicos} & \textbf{Critérios Não Técnicos} \\
+\hline
+\endfirsthead
+\endhead
+\endfoot
+\endlastfoot
+
+Familiar para desenvolvedores web. &
+Alta popularidade na web. \\
+\hline
+
+\textcolor{red}{Pouco suporte nativo em microcontroladores de pequeno porte.} &
+\textcolor{red}{Poucos desenvolvedores embarcados experientes com essa abordagem.} \\
+\hline
+
+\textcolor{red}{Baixa portabilidade para dispositivos embarcados como ESP32.} &
+\textcolor{red}{Ambientes específicos necessários (como Tessel, Espruino).} \\
+\hline
+
+\textcolor{red}{Não suportada diretamente pela Arduino IoT Cloud.} &
+~ \\
+\hline
+\end{longtable}
+
+\begin{center}
+\vspace{-0.5em}
+{\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+\end{center}
+
+Após análise dos critérios técnicos e não técnicos, a linguagem C/C++ utilizando o framework Arduino foi escolhida para este projeto com base nos seguintes motivos:
+\vspace{1.5em}
+
+\listarecuada{
+    \item Compatibilidade total com o ESP32 e com a Arduino IoT Cloud, sem necessidade de adaptadores ou configurações especiais.
+    \item Eficiência e controle direto do hardware, essencial para lidar com sensores, atuadores e comunicação em tempo real.
+    \item Amplo suporte da comunidade, extensa documentação e bibliotecas prontas, o que reduz o tempo e o custo de desenvolvimento.
+    \item Ferramentas gratuitas e maduras, como o Arduino IDE e o PlatformIO.
+    \item Alta portabilidade para outros projetos embarcados com microcontroladores similares.
+}
+
+A Arduino IoT Cloud oferece suporte nativo e completo apenas para C/C++, dentro do ecossistema Arduino. Ela não oferece suporte oficial para MicroPython, JavaScript ou Python puro. Essas linguagens podem ser usadas em ambientes externos, mas com integração mais difícil ou indireta.
+
+\needspace{5\baselineskip} % reserva espaço suficiente para a próxima seção
+\vspace*{-1.0em}  % Ajuste
+\section*{\fontsize{12pt}{14pt}\selectfont\textbf{3.3.8.3. Justificativa da escolha do SGBD (Sistema Gerenciador de Banco de Dados)}}
+\addcontentsline{toc}{section}{3.3.8.3. Justificativa da escolha do SGBD (Sistema Gerenciador de Banco de Dados)} 
+\vspace{-0.7\baselineskip}
+
+A forma como o Google Sheets está sendo usado, é superficialmente parecido com um banco relacional por usar tabelas (linhas e colunas), mas não implementa os recursos completos de um SGBD relacional, sendo o uso de chaves primárias e estrangeiras para relacionar essas tabelas e não oferece linguagem SQL completa para manipulação relacional (embora tenha algo como QUERY()), como por exemplo, MySQL, PostgreSQL, Oracle.
+
+O Google Sheets é mais como um repositório inicial de dados (uma “camada de coleta”), e depois importam esses dados para, se o projeto crescer muito, um banco de dados real (ex.: MySQL, PostgreSQL) para lidar com volumes maiores e garantir integridade.
+
+Um complemento interessante abordado foi a utilização de importar dados para o Power BI, tendo muitas vantagens em desempenho e flexibilidade, especialmente para análises rápidas e relatórios interativos. Mesmo que o Power BI não seja um SGBD relacional no sentido tradicional, ele aproveita um motor de análise em memória (VertiPaq) que dá muito poder ao analista e ao usuário final.

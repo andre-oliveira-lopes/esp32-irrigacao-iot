@@ -1,0 +1,191 @@
+% Fonte: Tam 12 pt
+\documentclass[12pt,a4paper]{article}  
+
+% ---------------------------- INÍCIO DAS CONFIGURAÇÕES ----------------------
+% Usa Arial real
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+% Idioma e formatação
+\usepackage[brazil]{babel}  % Hifenização e idioma
+\usepackage[none]{hyphenat} % Isso impede o LaTeX de fazer qualquer quebra silábica
+\usepackage{graphicx}       % Usar Imagens
+\usepackage{float} % para usar [H] e fixar a imagem
+\usepackage{indentfirst}    % Faz o primeiro parágrafo de cada seção também tenha recuo.
+\usepackage{setspace}
+
+% Espaçamento 1.5 e margens ABNT
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=2cm]{geometry}
+\onehalfspacing
+\setlength{\parindent}{1.25cm}  % ABNT: recuo de parágrafo
+\setlength{\parskip}{0pt}         % Espaço entre parágrafos (ABNT: não deve haver)
+
+% hang: alinha o número da nota à esquerda e o texto pendente e flushmargin: remove o recuo da primeira linha da nota de rodapé.
+\usepackage[hang,flushmargin]{footmisc}
+
+% referencias bibliograficas
+\usepackage{url}
+\usepackage{ragged2e}
+\usepackage{changepage}
+\usepackage{hyperref}       % Links clicáveis
+\hypersetup{
+  colorlinks=false,
+  pdfborder={0 0 0},
+  hidelinks
+}
+\urlstyle{same}   % URLs com mesma fonte do texto
+\sloppy           % Permite quebras de linha em URLs longas
+
+% para utilizar o sumario
+\usepackage{tocloft}
+
+\renewcommand{\contentsname}{} % evita erro posterior
+\renewcommand{\cfttoctitlefont}{\hspace*{-1000pt}} % empurra o título para fora
+\renewcommand{\cftaftertoctitle}{}
+\setlength{\cftbeforetoctitleskip}{-3.4em}
+\setlength{\cftaftertoctitleskip}{0.5em}
+
+\renewcommand{\cftdotsep}{1} % Tamanho da separação entre os pontinhos. 
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}   % se tiver seções
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}  % se tiver subseções
+
+\renewcommand{\cftsecfont}{\normalfont}       % Remove negrito dos títulos
+\renewcommand{\cftsubsecfont}{\normalfont}    % Remove negrito de subtítulos
+\renewcommand{\cftsecpagefont}{\normalfont}   % Números também sem negrito
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+
+\setlength{\cftbeforesecskip}{0.5em}          % Espaçamento entre seções
+\setlength{\cftsecindent}{0pt}                % Sem indentação
+
+\hbadness=10000 % Isso desativa os avisos de Underfull \hbox com badness abaixo de 10000
+
+% paginção das paginas 
+\usepackage{fancyhdr}    % Controle total do cabeçalho e rodapé
+\setlength{\headheight}{15pt} % cabeçalho e rodapé 
+\usepackage{lastpage}    % (opcional) se quiser contar total de páginas
+\pagestyle{fancy}        % Ativa o estilo personalizado
+\fancyhf{}               % Limpa cabeçalho e rodapé
+\renewcommand{\headrulewidth}{0pt} % Remove linha de topo
+\fancyhead[R]{\thepage} % Posiciona o número no canto superior direito
+
+% imentando textos
+\usepackage{needspace}
+
+% fazer tabela
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{color, colortbl, xcolor} % Para \textcolor
+\usepackage{longtable}
+\usepackage{listings}
+% ----------------- para uso do JavaScript
+\lstdefinelanguage{JavaScript}{
+  keywords={function, var, return, if, else, try, catch, new},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw},
+  ndkeywordstyle=\color{gray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinestyle{meucodigo}{
+  language=JavaScript,
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  breakatwhitespace=false,
+  keepspaces=true,
+  columns=fullflexible,
+  frame=none,
+  tabsize=2,
+  showstringspaces=false
+}
+% ------------- para uso da Linguagem M
+\lstdefinelanguage{PowerQuery}{
+  keywords={let, in, each, if, then, else, true, false, null},
+  morekeywords={[2]Table, Record, List, Text, Number, Function, Value},
+  keywordstyle=\color{blue}\bfseries,
+  keywordstyle=[2]\color{teal},
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]//,
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]",
+  morestring=[b]'
+}
+
+\lstdefinestyle{meuEstiloM}{
+  language=PowerQuery,
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=none,
+  tabsize=2
+}
+
+% ---------------------------- FIM DAS CONFIGURAÇÕES ---------------------- 
+
+% ------------- FUNÇÃO lista recuada CRIADA PARA SER CHAMADA ------------
+\newcommand{\listarecuada}[1]{%
+  \begingroup
+  \vspace*{1.0em}  % Ajuste
+  \setstretch{1.0}%
+  \fontsize{10pt}{12pt}\selectfont
+  \begin{adjustwidth}{4cm}{0cm}%
+  \begin{enumerate}
+  #1
+  \end{enumerate}
+  \end{adjustwidth}
+  \endgroup
+}
+% ------------- Fim da FUNÇÃO lista recuada------------
+% ------------- FUNÇÃO imagem com fonte CRIADA PARA SER CHAMADA ------------
+\newcommand{\minhaimagemcomfonte}[3]{%
+  \begin{figure}[H]
+  \begin{center}
+  \caption{\textbf{#3}}
+  \includegraphics[width=#1]{#2}
+  \vspace{0.5em}
+  
+  {\footnotesize\textit{Fonte: Elaborado pelo autor.}\par}
+  \end{center}
+  \end{figure}
+}
+% ------------- Fim da FUNÇÃO imagem com fonte------------
+
+\begin{document}
+
+\include{Capa}
+\pagenumbering{gobble} % Esconde numero de pagina
+\include{FolhaDeRosto}
+
+\begin{center}
+\textbf{SUMÁRIO}
+\end{center}
+\tableofcontents
+
+\include{RESUMO}
+
+\clearpage  % Esconde numero de pagina
+\pagenumbering{arabic} % Esconde numero de pagina
+\setcounter{page}{6} % A introdução inicia com esse numero
+
+\input{Introdução}
+\input{capitulos/capitulo1}
+\input{capitulos/capitulo2}
+\input{capitulos/capitulo3}
+\input{capitulos/capitulo4}
+
+\input{referenciasBibliograficas}
+\include{Anexos}
+
+\end{document}

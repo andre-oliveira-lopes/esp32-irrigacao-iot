@@ -1,0 +1,35 @@
+@startuml
+title Diagrama de Estados - Sistema de Irrigacao ESP32
+
+[*] --> Inicializacao
+
+state Inicializacao
+note right of Inicializacao
+  Setup de sensores e variáveis
+end note
+
+Inicializacao --> ConectandoWiFi
+
+state ConectandoWiFi
+note right of ConectandoWiFi
+  Tentando conexão Wi-Fi
+end note
+
+ConectandoWiFi --> Operando : Wi-Fi OK
+ConectandoWiFi --> Falha : Erro
+
+Falha --> ConectandoWiFi : Retry
+
+[*] --> Operando
+state Operando {
+  [*] --> LeituraSensores
+  LeituraSensores --> AnaliseCondicoes
+  AnaliseCondicoes --> Irrigando : Sol e solo seco
+  AnaliseCondicoes --> RemovendoAgua : Sol sumiu
+  AnaliseCondicoes --> [*] : Condições normais
+  Irrigando --> EnviarDados
+  RemovendoAgua --> EnviarDados
+  EnviarDados --> Sono
+  Sono --> LeituraSensores : Após 10h
+}
+@enduml

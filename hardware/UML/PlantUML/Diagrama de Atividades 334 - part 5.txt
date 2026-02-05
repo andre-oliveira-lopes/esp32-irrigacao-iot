@@ -1,0 +1,39 @@
+partition zerarTudoFree {
+  :Para cada canal de 0 a 15;
+  :valores_analogicos[canal] ← 0;
+  :somaLeituras[canal] ← 0;
+  :medias[canal] ← 0;
+  :mediasPercentual[canal] ← 0;
+
+  :totalAmostrasJanela ← 0;
+}
+
+partition "atualizarIndicador(tempoAtualMillis)" {
+
+  if (tempoAtualMillis - ultimoTempoIndicador >= intervaloIndicador?) then (sim)
+  
+    :ultimoTempoIndicador = tempoAtualMillis;
+
+    :contadorPontos = contadorPontos + 1;
+
+    if (contadorPontos > 5?) then (sim)
+      :contadorPontos = 1;
+    endif
+
+    :pontos = "";
+
+    repeat
+      :pontos = pontos + ".";
+    repeat while (i < contadorPontos)
+
+    :Limpa a tela do LCD;
+    :Define o cursor na coluna (15 - contadorPontos), linha 1;
+    :Imprime (pontos + "     ") no LCD;
+
+    :Imprime pontos no Monitor Serial;
+
+    :Imprime pontos via Bluetooth (SerialBT);
+
+  endif
+
+}

@@ -1,0 +1,92 @@
+partition lerMultiplexador {
+  :Para cada bit (0 a 3);
+  :Definir o pino do seletor como HIGH ou LOW;
+  note right
+    Isso é feito com base na
+    tabelaMUX e no canalAtual
+  end note
+  :Retornar a leitura analógica do pino SIG;
+}
+
+partition coletarLeituras {
+  :valorLido ← chamar lerMultiplexador();
+  :Armazenar valorLido em valores_analogicos[canalAtual];
+  :Adicionar valorLido em somaLeituras[canalAtual];
+  :Incrementar totalAmostrasJanela;
+  :Incrementar canalAtual;
+
+  if (canalAtual ≥ 16?) then (sim)
+    :canalAtual ← 0;
+  endif
+}
+
+partition calcularMedia60s {
+  if (totalAmostrasJanela > 0?) then (sim)
+    :amostrasPorCanal ← totalAmostrasJanela ÷ 16;
+  else
+    :amostrasPorCanal ← 0;
+  endif
+
+  if (amostrasPorCanal > 0?) then (sim)
+    :Para cada canal de 0 a 15;
+    :medias[canal] ← somaLeituras[canal] ÷ amostrasPorCanal;
+  else
+    :Exibir mensagem de erro no Serial e Bluetooth;
+  endif
+}
+
+partition percentualLeituras {
+  :Para cada pino de 0 até numeroPino - 1;
+  :leitura ← medias[pino];
+  :minimo ← sensoresMinimos[pino];
+  :maximo ← sensoresMaximos[pino];
+
+  if (minimo = maximo?) then (sim)
+    :mediasPercentual[pino] ← 0;
+    :CONTINUAR para o próximo pino;
+  endif
+
+  :percentual ← map(leitura, minimo, maximo, 100, 0);
+  :mediasPercentual[pino] ← constrain(percentual, 0, 100);
+}
+
+partition exibirLeituras {
+  :Exibir "===== UMIDADE (%) =====" no Serial e Bluetooth;
+  :Para cada canal de 0 a 15;
+  :Construir mensagem "Canal X: Y %";
+  :Exibir mensagem no Serial e Bluetooth;
+
+  :Exibir linha em branco no Serial e Bluetooth;
+
+  :agora ← millis();
+  if ((agora - ultimaTrocaLCD) ≥ intervaloLCD?) then (sim)
+    :ultimaTrocaLCD ← agora;
+    :Limpar LCD;
+    :Exibir na linha 1 → "P" + indiceLCD + ": " + mediasPercentual[indiceLCD] + "%";
+
+    if (indiceLCD + 1 ≤ 16?) then (sim)
+      :Exibir na linha 2 → "P" + (indiceLCD + 1) + ": " + mediasPercentual[indiceLCD + 1] + "%";
+    endif
+
+    :Incrementar indiceLCD;
+    if (indiceLCD > 15?) then (sim)
+      :indiceLCD ← 0;
+    endif
+  endif
+}
+
+partition imprimirMediaPinoEspecifico {
+  if (pino entre 0 e 15?) then (sim)
+    :Construir "Pino X: Y %";
+    :Exibir no Serial e Bluetooth;
+    :Limpar LCD;
+    :Linha 1 → "Pino X Umidade:";
+    :Linha 2 → "Y%";
+  else
+    :Construir "Erro: Pino X invalido.";
+    :Exibir no Serial e Bluetooth;
+    :Limpar LCD;
+    :Linha 1 → "ERRO PINO!";
+    :Linha 2 → "Pino X invalido.";
+  endif
+}

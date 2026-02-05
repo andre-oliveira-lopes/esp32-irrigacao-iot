@@ -1,0 +1,110 @@
+@startuml
+title Modelo de Classes de Projeto - Irrigação Automatizada
+
+' Estilo opcional
+skinparam classAttributeIconSize 0
+
+' ======================= CLASSES PRINCIPAIS ========================
+
+class SensorUmidade {
+  - pino : int
+  - valorAtual : float
+  + lerValor() : float
+}
+
+class MultiplexadorCD74HC4067 {
+  - canalAtual : int
+  + selecionarCanal(canal : int)
+  + lerCanal() : float
+}
+
+class SensorDHT11 {
+  - pino : int
+  - temperatura : float
+  - umidade : float
+  + lerDados() : void
+  + getTemperatura() : float
+  + getUmidade() : float
+}
+
+class SensorLDR {
+  - pino : int
+  - luminosidade : int
+  + lerLuminosidade() : int
+}
+
+class ValvulaSolenoide {
+  - pino : int
+  - estado : bool
+  + ativar() : void
+  + desativar() : void
+}
+
+class ControladorIrrigacao {
+  - sensoresSolo : List<SensorUmidade>
+  - sensorLuz : SensorLDR
+  - valvula : ValvulaSolenoide
+  + verificarCondicoes() : void
+  + iniciarIrrigacao() : void
+  + pararIrrigacao() : void
+}
+
+class DisplayLCD {
+  + exibirMensagem(msg : String) : void
+}
+
+class ComunicadorWiFi {
+  - ssid : String
+  - senha : String
+  + conectar() : void
+  + enviarDados(dados : String) : void
+  + lerComando() : String
+}
+
+class ArduinoCloud {
+  + sincronizarVariaveis()
+  + enviarParaPlanilha()
+  + lerComandosRemotos()
+}
+
+class GerenciadorEnergia {
+  - nivelBateria : float
+  + verificarNivel() : float
+  + estaCarregando() : bool
+}
+
+class PlacaSolar {
+  - potencia : float
+  + gerarEnergia() : float
+}
+
+class Bateria {
+  - cargaAtual : float
+  + fornecerEnergia() : void
+  + recarregar() : void
+}
+
+class ControladorCarga {
+  + regularCarga() : void
+  + protegerSistema() : void
+}
+
+' ======================= RELACIONAMENTOS ==========================
+
+ControladorIrrigacao --> SensorUmidade : usa
+ControladorIrrigacao --> SensorLDR : usa
+ControladorIrrigacao --> ValvulaSolenoide : controla
+ControladorIrrigacao --> SensorDHT11 : monitora
+ControladorIrrigacao --> DisplayLCD : envia status
+ControladorIrrigacao --> ComunicadorWiFi : comunica
+
+ComunicadorWiFi --> ArduinoCloud : integra
+ArduinoCloud --> PlanilhaOnline : envia e lê
+
+MultiplexadorCD74HC4067 --> SensorUmidade : lê canais
+
+GerenciadorEnergia --> Bateria : monitora
+GerenciadorEnergia --> PlacaSolar : coleta energia
+GerenciadorEnergia --> ControladorCarga : gerencia segurança
+
+@enduml

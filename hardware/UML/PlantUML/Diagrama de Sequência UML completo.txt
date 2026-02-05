@@ -1,0 +1,64 @@
+@startuml
+title Modelo Conceitual de Dados - Irrigação Automatizada em Pomares e Pequenas Plantações
+
+entity "Usuário" as Usuario {
+  +ID_Usuario : int
+  Nome : string
+  Email : string
+  CPF : string
+  Telefone : string
+}
+
+entity "Dispositivo (ESP32)" as Dispositivo {
+  +ID_Dispositivo : int
+  Nome : string
+  Localizacao : string
+  Status : string
+  ID_Usuario : int
+}
+
+entity "Planta / Área Monitorada" as Planta {
+  +ID_Planta : int
+  NomePlanta : string
+  Área : string
+  UmidadeMinimaIdeal : float
+  UmidadeMaximaIdeal : float
+  ID_Dispositivo : int
+}
+
+entity "Sensor" {
+  +ID_Sensor : int
+  Tipo : string
+  LocalizacaoSensor : string
+  ID_Dispositivo : int
+  ID_Planta : int
+}
+
+entity "Leitura de Sensor" as Leitura {
+  +ID_Leitura : int
+  DataHora : datetime
+  ValorLido : float
+  ID_Sensor : int
+  ID_Planta : int
+}
+
+entity "Ação de Irrigação" as AcaoIrrigacao {
+  +ID_Acao : int
+  DataHora : datetime
+  DuracaoSegundos : int
+  ID_Dispositivo : int
+  ID_Planta : int
+}
+
+' RELACIONAMENTOS
+
+Usuario ||--o{ Dispositivo : possui >
+Dispositivo ||--o{ Planta : controla >
+Dispositivo ||--o{ Sensor : conecta >
+Planta ||--|| Sensor : usa >
+Sensor ||--o{ Leitura : gera >
+Planta ||--o{ Leitura : relacionada >
+Planta ||--o{ AcaoIrrigacao : recebe >
+Dispositivo ||--o{ AcaoIrrigacao : executa >
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+actor Usuário
+participant ESP32
+participant "Sensor DHT11" as DHT
+participant "Sensor LDR" as LDR
+participant "Sensor Solo (MUX)" as Solo
+participant "Relé/Válvula Solenoide" as Valvula
+participant "Planilha na Nuvem" as Planilha
+participant "Arduino Cloud" as Cloud
+
+Usuário -> ESP32 : Liga dispositivo
+activate ESP32
+ESP32 -> ESP32 : verificarConexaoWiFi()
+
+ESP32 -> DHT : lerSensorDHT()
+DHT --> ESP32 : Temp / Umidade
+
+ESP32 -> LDR : lerSensorLDR()
+LDR --> ESP32 : Nível de Luz
+
+ESP32 -> Solo : lerMultiplexador()\ncoletarLeituras()
+Solo --> ESP32 : Umidade do solo por canal
+
+ESP32 -> ESP32 : analisarLuminosidade()
+ESP32 -> ESP32 : calcularMedia60s()\npercentualLeituras()
+
+alt Umidade baixa e Sol nasceu
+  ESP32 -> Valvula : processarIrrigacao()\nativar relé
+  Valvula --> ESP32 : Irrigação iniciada
+end
+
+ESP32 -> Planilha : escreverEmLista()\nregistrarDadosPlanilha()
+ESP32 -> Cloud : atualizarValoresPlanilhaNuvem()
+
+ESP32 -> ESP32 : modoSonoEsp32()
+ESP32 --> Usuário : Entra em Deep Sleep (10h)
+deactivate ESP32
+@enduml

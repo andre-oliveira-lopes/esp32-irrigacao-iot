@@ -1,0 +1,151 @@
+@startuml
+title Diagrama de Atividades Completo - Sistema ESP32 Irrigação
+
+start
+
+:Inicializar LCD;
+:Inicializar Bluetooth;
+:Inicializar sensor DHT;
+:Conectar à rede Wi-Fi;
+:Inicializar HTTPClient;
+:Configurar JSON;
+:Importar "thingProperties.h";
+
+:Entrar em loop();
+
+repeat
+  :Atualizar ArduinoCloud;
+  :Obter millis();
+
+  if ((millis - tempoUltimaVerificacaoWiFi) >= intervaloVerificacaoWiFi?) then (sim)
+    partition verificarConexaoWiFi {
+      if (wifiConectado == false) then (sim)
+        if (WiFi.status() == WL_CONNECTED) then (sim)
+          :wifiConectado ← true;
+          :tentandoConectar ← false;
+          :Exibir "Wi-Fi conectado com sucesso!" no Serial Monitor;
+
+          :Montar cabeçalho da planilha com colunas:
+          note right
+            "Data completa", "Data", "Hora", 
+            "Estado do LED", "Estado Rele A", "Estado Rele B",
+            "Temperatura (°C)", "Umidade (%)", "Luminosidade (%)",
+            "Umidade Solo 3", "Umidade Solo 10", "Umidade Solo 14"
+          end note
+          :Chamar montarCabecalho("dados", "A", listaColunas);
+        else (não)
+          :Exibir "Tentando reconectar ao Wi-Fi..." no Serial Monitor;
+          :WiFi.disconnect();
+          :WiFi.begin(ssid, password);
+        endif
+      endif
+    }
+  endif
+
+  if (wifiConectado == false) then (sim)
+    :Retornar (sem Wi-Fi);
+  endif
+
+  if ((millis - ultimoTempoDHT) >= intervaloLeituraDHT?) then (sim)
+    partition lerSensorDHT {
+      :Ler temperatura e umidade (TempAndHumidity th);
+      if (valores são válidos E dentro dos limites) then (sim)
+        :somaTemp += temperatura;
+        :somaUmid += umidade;
+        :contAmostrasValidasDHT += 1;
+      endif
+    }
+    :Atualiza ultimoTempoDHT;
+  endif
+
+  if ((millis - ultimoTempoMediaDHT) >= intervaloMediaDHT?) then (sim)
+    partition enviarMediaDHT {
+      if (contAmostrasValidasDHT > 0) then (sim)
+        :mediaTemp ← somaTemp / contAmostrasValidasDHT;
+        :mediaUmid ← somaUmid / contAmostrasValidasDHT;
+        :dados ← formatar string "Temp: x°C | Umid: y%";
+
+        :Limpar LCD;
+        :Cursor na primeira linha;
+        :Exibir no LCD: "T:x°C U:y%";
+
+        :Exibir dados no Serial;
+        :Exibir dados no Bluetooth;
+      endif
+
+      :somaTemp ← 0.0;
+      :somaUmid ← 0.0;
+      :contAmostrasValidasDHT ← 0;
+      :Atualiza ultimoTempoMediaDHT;
+    }
+  endif
+
+  if ((millis - ultimoTempoLDR) >= intervaloLDR?) then (sim)
+    partition lerSensorLDR {
+      :valorLDR ← ler valor analógico do sensor LDR (0 a 4095);
+      :percentualLuminosidadeLocal ← converter valorLDR para porcentagem inversa;
+      :somaLuz ← somaLuz + percentualLuminosidadeLocal;
+      :contAmostrasValidasLDR ← contAmostrasValidasLDR + 1;
+    }
+    :Atualiza ultimoTempoLDR;
+  endif
+
+  if ((millis - ultimoTempoMediaLDR) >= intervaloMediaLDR?) then (sim)
+    partition enviarMediaLDR {
+      if (contAmostrasValidasLDR > 0) then (sim)
+        :mediaLuz ← somaLuz / contAmostrasValidasLDR;
+      else (não)
+        :Exibir "Sem leituras válidas no último minuto" no Serial e Bluetooth;
+      endif
+      :somaLuz ← 0;
+      :contAmostrasValidasLDR ← 0;
+    }
+    :analisarLuminosidade(mediaLuz);
+    :Atualiza ultimoTempoMediaLDR;
+  endif
+
+  partition analisarLuminosidade {
+    :agora ← millis();
+    :dados ← formatar texto com valor de luminosidade;
+
+    if (mediaLuz < 10) then (baixa luminosidade)
+      :Exibir dados no Serial, Bluetooth e LCD;
+      if (estaDeNoite == falso) then (sim)
+        if (tempoInicioBaixaLuz == 0) then (sim)
+          :tempoInicioBaixaLuz ← agora;
+        endif
+
+        if (acaoExecutadaAoAnoitecer == falso) and ((agora - tempoInicioBaixaLuz) >= 600000) then (sim)
+          :executarAcao_solDesaparece();
+          :acaoExecutadaAoAnoitecer ← verdadeiro;
+          :estaDeNoite ← verdadeiro;
+          :acaoExecutadaAoAmanhecer ← falso;
+          :tempoInicioBaixaLuz ← 0;
+        endif
+      endif
+      :inicioLuzAmanhecendo ← 0;
+    else if (mediaLuz > 10 and mediaLuz <= 80) then (luminosidade normal)
+      :Exibir dados no Serial, Bluetooth e LCD;
+      if (estaDeNoite == verdadeiro) then (sim)
+        if (inicioLuzAmanhecendo == 0) then (sim)
+          :inicioLuzAmanhecendo ← agora;
+        endif
+
+        if (acaoExecutadaAoAmanhecer == falso) and ((agora - inicioLuzAmanhecendo) >= 300000) then (sim)
+          :executarAcao_solAparece();
+          :acaoExecutadaAoAmanhecer ← verdadeiro;
+          :estaDeNoite ← falso;
+          :acaoExecutadaAoAnoitecer ← falso;
+          :inicioLuzAmanhecendo ← 0;
+        endif
+      endif
+    else if (mediaLuz > 80) then (alta luminosidade)
+      :Exibir dados no Serial, Bluetooth e LCD;
+      :tempoInicioBaixaLuz ← 0;
+      :inicioLuzAmanhecendo ← 0;
+    endif
+  }
+
+repeat while (loop ativo)
+
+@enduml
