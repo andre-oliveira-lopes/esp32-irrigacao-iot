@@ -86,27 +86,25 @@ Em ambientes de produção, essas bibliotecas podem ser instaladas diretamente p
 
 ## 🔌 Hardware utilizado
 
-
-|================================================================================================================================================
-| ID | Nome da peça                                           				   | Número da peça             | Quantidade
-| P1 | Placa ESP32 com WI-FI, Bluetooth ESP32S IDE Dual Core - Dev Kit V1 + Cabo Micro USB | -                  	| 1
-| P2 | Placa de Expansão para ESP32-DevKit V1 30 Pinos (ESP32 Base Board) 		   | -                  	| 1
-| S1 | Sensores de umidade do solo                            				   | -                          | conforme necessidade
-| S2 | Sensor de Temperatura e Umidade do ar (DHT11)          				   | -                          | conforme necessidade
-| S3 | Módulo Sensor de Luminosidade Fotoresistor (LDR)       				   | -                          | conforme necessidade
-| R1 | Módulo relé 1 canal de 5V                              				   | -                          | conforme necessidade
-| V1 | Válvula solenóide 12V                                  				   | -                          | conforme necessidade
-| M1 | Multiplexador CD74HC4067                               				   | -                          | 1
-| PS1| Painel solar 50W / 12V + Regulador de carga de 20A     				   | -                          | conforme necessidade
-| PS2| Painel solar 50W / 12V (adicional)                     				   | -                          | conforme necessidade
-| B1 | Bateria selada 12V / 20Ah                              				   | -                          | 1
-| F1 | Fonte de alimentação 12V 2A para sensores              				   | -                          | conforme necessidade
-| F2 | Fonte de alimentação 5V 2A para sensores               				   | -                          | conforme necessidade
-| D1 | Display LCD I2C 16x2                                   				   | -                          | 1
-| C1 | Caixa de proteção IP65 para uso externo                				   | -                          | conforme necessidade
-| A1 | Conta ativa na plataforma Arduino Cloud                				   | -                          | 1
-| T1 | Ferramentas de desenvolvimento (open-source)           				   | -                          | 1
-|===
+| ID  | Nome da peça                                                                 | Número da peça | Quantidade           |
+| --- | ---------------------------------------------------------------------------- | -------------- | -------------------- |
+| P1  | Placa ESP32 com Wi-Fi e Bluetooth (ESP32S Dual Core) – Dev Kit V1 + cabo USB | —              | 1                    |
+| P2  | Placa de expansão para ESP32 DevKit V1 (ESP32 Base Board – 30 pinos)         | —              | 1                    |
+| S1  | Sensores de umidade do solo                                                  | —              | Conforme necessidade |
+| S2  | Sensor de temperatura e umidade do ar (DHT11)                                | —              | Conforme necessidade |
+| S3  | Sensor de luminosidade (LDR – fotoresistor)                                  | —              | Conforme necessidade |
+| R1  | Módulo relé 1 canal – 5V                                                     | —              | Conforme necessidade |
+| V1  | Válvula solenóide 12V                                                        | —              | Conforme necessidade |
+| M1  | Multiplexador analógico CD74HC4067                                           | —              | 1                    |
+| PS1 | Painel solar 50W / 12V + regulador de carga 20A                              | —              | Conforme necessidade |
+| PS2 | Painel solar 50W / 12V (adicional)                                           | —              | Conforme necessidade |
+| B1  | Bateria selada 12V / 20Ah                                                    | —              | 1                    |
+| F1  | Fonte de alimentação 12V / 2A (sensores e atuadores)                         | —              | Conforme necessidade |
+| F2  | Fonte de alimentação 5V / 2A (sensores e lógica)                             | —              | Conforme necessidade |
+| D1  | Display LCD 16x2 com interface I2C                                           | —              | 1                    |
+| C1  | Caixa de proteção IP65 para uso externo                                      | —              | Conforme necessidade |
+| A1  | Conta ativa na plataforma Arduino Cloud                                      | —              | 1                    |
+| T1  | Ferramentas de desenvolvimento open-source                                   | —              | 1                    |
 
 
 ---
